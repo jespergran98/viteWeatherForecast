@@ -1,5 +1,5 @@
 {
-  "name": "vite-project",
+  "name": "vite-weather-forecast",
   "private": true,
   "version": "0.0.0",
   "type": "module",

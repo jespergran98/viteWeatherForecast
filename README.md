@@ -87,8 +87,54 @@ src/
 └── main.jsx
 ```
 
-Obligatorisk NPM-pakke (oppgavekrav)
-Bashnpm install pull-to-refresh-react
-Gir ekte "Slipp for å oppdatere"-følelse på mobil. Når brukeren drar siden ned, hentes all værdata på nytt fra MET sine API-er – uten full page reload.
-→ Fungerer automatisk på telefon/nettbrett
-→ Desktop får en vanlig "↻ Oppdater"-knapp i Header-komponenten
+---
+
+### Valgte NPM-pakker i prosjektet (alle er frivillige oppgaveforslag – ingen er påkrevd, men må minst bruke en)
+
+| Pakke                          | Begrunnelse og nytte i Vær-appen                                                                      |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| **`ky`**                       | Ultralett (~1.7 kB) og moderne HTTP-klient. Valgt fremfor Axios – mindre bundle og mye penere syntax. |
+| **`@tanstack/react-query`**    | Automatisk caching, refetch, retry, deduping og offline-støtte. Gjør all værdata-håndtering silkemyk. |
+| **`zustand` + `persist`**      | Minimalistisk global state + automatisk lagring av "Mine steder" i localStorage uten egen kode.       |
+| **`date-fns` + `date-fns-tz`** | Lett og treeshakable dato-bibliotek. Brukes til norsk formatering av tidspunkt og prognosedager.      |
+| **`clsx`**                     | Rask og ryddig betinget klassenavn (f.eks. rød/gul/oransje varselbanner).                             |
+| **`framer-motion`**            | Premium-animasjoner ved legg til/fjern steder og modal-transisjoner.                                  |
+| **`pull-to-refresh-react`**    | Gir ekte native "pull-to-refresh"-følelse på mobil. På desktop vises vanlig oppdater-knapp.           |
+| **`use-debounce`**             | Debouncer søket i AddLocationModal så vi slipper å spamme Nominatim.                                  |
+| **`ngeohash`**                 | Hindrer duplikater av samme sted ved å sammenligne geografiske posisjoner presist.                    |
+| **`@radix-ui/react-dialog`**   | 100 % tilgjengelig og pen modal for å søke og legge til nye steder.                                   |
+| **`@radix-ui/react-toast`**    | Elegante toast-meldinger (f.eks. "Maks 10 steder nådd" eller nettverksfeil).                          |
+| **`vite-plugin-svgr`** (dev)   | Lar oss importere METs weathericons direkte som React-komponenter.                                    |
+
+### Beste praksis fra en som har laget 6 værnettsider:
+
+- En liten `src/lib/api.js` med `ky.extend()` + TanStack Query → gir retry, timeout, caching og korrekt User-Agent automatisk på alle MET-kall
+- Global `useLocationsStore` (Zustand + persist) → erstattet hele `utils/storage.js` og ryddet enormt opp i App.jsx
+- `<AnimatePresence>` fra Framer Motion rundt kortene → magisk flyt når steder legges til eller fjernes
+
+### Endelig package.json
+
+```json
+{
+  "dependencies": {
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "ky": "^1.7.2",
+    "@tanstack/react-query": "^5.59.16",
+    "zustand": "^5.0.1",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.0.0",
+    "pull-to-refresh-react": "^2.0.0",
+    "use-debounce": "^10.0.4",
+    "ngeohash": "^0.6.3",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-toast": "^1.2.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite-plugin-svgr": "^4.3.0"
+  }
+}
+```
