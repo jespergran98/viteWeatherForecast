@@ -190,26 +190,40 @@ VærVarsel.no?
 Current file structure:
 
 ```
-viteweatherforecast (root)
-│
-├── node_modules/
+viteweatherforecast/
 ├── public/
 │   └── assets/
+│       ├── heroBackgrounds/
+│       │   └── placeholder.jpg
+│       ├── logo/
+│       │   └── logo.png
 │       └── weatherIcons/
-│           ├── darkmode/
-│           └── lightmode/
+│           ├── lightmode/
+│           │   ├── 01d.svg
+│           │   ├── 01n.svg
+│           │   ├── 01m.svg
+│           │   └── ... (all other icon files)
+│           └── darkmode/
+│               ├── 01d.svg
+│               ├── 01n.svg
+│               ├── 01m.svg
+│               └── ... (all other icon files)
 ├── src/
-│   ├── App.css
+│   ├── components/
+│   │   ├── Hero/
+│   │   │   ├── Hero.jsx
+│   │   │   └── Hero.css
+│   │   └── WeatherCard/
+│   │       ├── WeatherCard.jsx
+│   │       └── WeatherCard.css
+│   ├── services/
+│   │   ├── locationService.js
+│   │   ├── weatherService.js
+│   │   └── geocodingService.js
 │   ├── App.jsx
-│   ├── index.css
-│   ├── index.jsx
+│   ├── App.css
 │   └── main.jsx
-├── .gitignore
-├── eslint.config.js
 ├── index.html
 ├── package.json
-├── package-lock.json
-├── README.md
-├── vite.config.js
-└── viteWeatherForecast - Shortcut.lnk
+└── vite.config.js
 ```

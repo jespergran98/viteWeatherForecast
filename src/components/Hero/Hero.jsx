@@ -1,8 +1,15 @@
+// src/components/Hero/Hero.jsx
 import React, { useState } from 'react'
+import WeatherCard from '../WeatherCard/WeatherCard'
 import './Hero.css'
 
 const Hero = () => {
   const [darkMode, setDarkMode] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
+
+  const handleRefresh = () => {
+    setRefreshTrigger(prev => prev + 1)
+  }
 
   return (
     <div className={`hero-container ${darkMode ? 'dark-mode' : ''}`}>
@@ -23,7 +30,11 @@ const Hero = () => {
             {/* Action Buttons */}
             <div className="nav-actions">
               {/* Refresh Button */}
-              <button className="nav-btn" aria-label="Refresh">
+              <button 
+                className="nav-btn" 
+                onClick={handleRefresh}
+                aria-label="Refresh weather"
+              >
                 <svg 
                   className="icon refresh-icon" 
                   fill="none" 
@@ -100,24 +111,10 @@ const Hero = () => {
         <div className="hero-content">
           <div className="glass-card">
             <div className="card-inner">
-              {/* Placeholder content */}
-              <div className="placeholder">
-                <div className="placeholder-icon">
-                  <svg 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
-                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" 
-                    />
-                  </svg>
-                </div>
-                <p>Weather information will appear here</p>
-              </div>
+              <WeatherCard 
+                darkMode={darkMode} 
+                onRefresh={refreshTrigger}
+              />
             </div>
           </div>
         </div>

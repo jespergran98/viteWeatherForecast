@@ -1,3 +1,5 @@
+/* src/components/Hero/Hero.css */
+
 /* Hero Container */
 .hero-container {
   min-height: 100vh;
@@ -144,34 +146,6 @@
   justify-content: center;
 }
 
-/* Placeholder */
-.placeholder {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.placeholder-icon {
-  width: 4rem;
-  height: 4rem;
-  margin: 0 auto 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.placeholder-icon svg {
-  width: 2.5rem;
-  height: 2.5rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.placeholder p {
-  font-size: 1.125rem;
-  margin: 0;
-}
-
 /* Responsive Design - Tablet */
 @media (min-width: 640px) {
   .navbar {
@@ -198,20 +172,6 @@
   
   .glass-card {
     max-width: 40rem;
-  }
-  
-  .placeholder-icon {
-    width: 5rem;
-    height: 5rem;
-  }
-  
-  .placeholder-icon svg {
-    width: 3rem;
-    height: 3rem;
-  }
-  
-  .placeholder p {
-    font-size: 1.25rem;
   }
 }
 
