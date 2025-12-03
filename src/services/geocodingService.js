@@ -2,20 +2,12 @@
 
 /**
  * Converts geographic coordinates to a human-readable location name
- * Uses OpenStreetMap's Nominatim reverse geocoding service
- * @param {number} latitude 
- * @param {number} longitude 
- * @returns {Promise<string>}
  */
 export const getLocationName = async (latitude, longitude) => {
   try {
     const response = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&accept-language=en`,
-      {
-        headers: {
-          'Accept': 'application/json',
-        }
-      }
+      { headers: { 'Accept': 'application/json' } }
     );
 
     if (!response.ok) {
@@ -23,18 +15,15 @@ export const getLocationName = async (latitude, longitude) => {
     }
 
     const data = await response.json();
+    const address = data.address || {};
     
-    // Extract city/town/village name, fallback to other administrative levels
-    const locationName = 
-      data.address?.city || 
-      data.address?.town || 
-      data.address?.village || 
-      data.address?.municipality ||
-      data.address?.county ||
-      data.address?.state ||
-      'Unknown Location';
-
-    return locationName;
+    return address.city || 
+           address.town || 
+           address.village || 
+           address.municipality ||
+           address.county ||
+           address.state ||
+           'Unknown Location';
   } catch (error) {
     console.error('Geocoding error:', error);
     return 'Unknown Location';

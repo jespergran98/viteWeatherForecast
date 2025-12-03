@@ -1,8 +1,13 @@
 // src/services/locationService.js
 
+const ERROR_MESSAGES = {
+  1: 'Location permission denied. Please enable location access.',
+  2: 'Location information is unavailable.',
+  3: 'Location request timed out.'
+};
+
 /**
  * Gets the user's current geographic location using the browser's Geolocation API
- * @returns {Promise<{latitude: number, longitude: number}>}
  */
 export const getUserLocation = () => {
   return new Promise((resolve, reject) => {
@@ -12,35 +17,15 @@ export const getUserLocation = () => {
     }
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        });
-      },
-      (error) => {
-        let errorMessage = 'Unable to retrieve your location';
-        
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            errorMessage = 'Location permission denied. Please enable location access.';
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information is unavailable.';
-            break;
-          case error.TIMEOUT:
-            errorMessage = 'Location request timed out.';
-            break;
-          default:
-            errorMessage = 'An unknown error occurred.';
-        }
-        
-        reject(new Error(errorMessage));
-      },
+      (position) => resolve({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }),
+      (error) => reject(new Error(ERROR_MESSAGES[error.code] || 'An unknown error occurred.')),
       {
         enableHighAccuracy: false,
         timeout: 10000,
-        maximumAge: 300000 // Cache location for 5 minutes
+        maximumAge: 300000
       }
     );
   });
