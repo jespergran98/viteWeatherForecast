@@ -63,41 +63,98 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
     }
   }, [onRefresh]);
 
-  const getWeatherIcon = (symbolCode) => {
+const getWeatherIcon = (symbolCode) => {
     if (!symbolCode) return null;
 
+    // Map MET Norway weather symbols to icon numbers
     const iconMap = {
-      'clearsky': '01', 'fair': '02', 'partlycloudy': '03', 'cloudy': '04',
-      'lightrainshowers': '40', 'rainshowers': '05', 'heavyrainshowers': '41',
-      'lightrainshowersandthunder': '24', 'rainshowersandthunder': '06',
-      'heavyrainshowersandthunder': '25', 'lightsleetshowers': '42',
-      'sleetshowers': '07', 'heavysleetshowers': '43',
-      'lightsleetshowersandthunder': '26', 'sleetshowersandthunder': '20',
-      'heavysleetshowersandthunder': '27', 'lightsnowshowers': '44',
-      'snowshowers': '08', 'heavysnowshowers': '45',
-      'lightsnowshowersandthunder': '28', 'snowshowersandthunder': '21',
-      'heavysnowshowersandthunder': '29', 'lightrain': '46', 'rain': '09',
-      'heavyrain': '10', 'lightrainandthunder': '30', 'rainandthunder': '22',
-      'heavyrainandthunder': '11', 'lightsleet': '47', 'sleet': '12',
-      'heavysleet': '48', 'lightsleetandthunder': '31', 'sleetandthunder': '23',
-      'heavysleetandthunder': '32', 'lightsnow': '49', 'snow': '13',
-      'heavysnow': '14', 'lightsnowandthunder': '33', 'snowandthunder': '14',
-      'heavysnowandthunder': '34', 'fog': '15'
+      'clearsky': '01',
+      'fair': '02',
+      'partlycloudy': '03',
+      'cloudy': '04',
+      'rainshowers': '05',
+      'rainshowersandthunder': '06',
+      'sleetshowers': '07',
+      'snowshowers': '08',
+      'rain': '09',
+      'heavyrain': '10',
+      'heavyrainandthunder': '11',
+      'sleet': '12',
+      'snow': '13',
+      'heavysnow': '14',
+      'fog': '15',
+      'sleetshowersandthunder': '20',
+      'snowshowersandthunder': '21',
+      'rainandthunder': '22',
+      'sleetandthunder': '23',
+      'lightrainshowersandthunder': '24',
+      'heavyrainshowersandthunder': '25',
+      'lightsleetshowersandthunder': '26',
+      'heavysleetshowersandthunder': '27',
+      'lightsnowshowersandthunder': '28',
+      'heavysnowshowersandthunder': '29',
+      'lightrainandthunder': '30',
+      'lightsleetandthunder': '31',
+      'heavysleetandthunder': '32',
+      'lightsnowandthunder': '33',
+      'heavysnowandthunder': '34',
+      'lightrainshowers': '40',
+      'heavyrainshowers': '41',
+      'lightsleetshowers': '42',
+      'heavysleetshowers': '43',
+      'lightsnowshowers': '44',
+      'heavysnowshowers': '45',
+      'lightrain': '46',
+      'lightsleet': '47',
+      'heavysleet': '48',
+      'lightsnow': '49',
+      'heavysnow': '50'
     };
 
-    const parts = symbolCode.split('_');
-    const weatherType = parts.slice(0, -1).join('');
-    const timeVariant = parts[parts.length - 1];
+    // Icons that have day/night/polartwilight variants (contain sun/moon)
+    const iconsWithTimeVariants = ['01', '02', '03', '05', '06', '07', '08', '24', '25', '26', '27', '28', '29', '40', '41', '42', '43', '44', '45'];
 
-    const iconNumber = iconMap[weatherType] || '01';
-    let variant = 'd';
-    
-    if (timeVariant === 'night' || timeVariant === 'polartwilight') {
-      variant = 'n';
+    let weatherType;
+    let timeVariant;
+
+    // Check if symbol code contains underscore
+    if (symbolCode.includes('_')) {
+      // Parse symbol code with time variant
+      const parts = symbolCode.split('_');
+      timeVariant = parts[parts.length - 1];
+      weatherType = parts.slice(0, -1).join('_');
+    } else {
+      // No time variant in symbol code, use the whole thing
+      weatherType = symbolCode;
+      timeVariant = null;
     }
 
-    const theme = darkMode ? 'darkmode' : 'lightmode';
-    return `/assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
+    // Get icon number from map
+    const iconNumber = iconMap[weatherType] || '01';
+    
+    // Check if this icon needs a time variant
+    if (iconsWithTimeVariants.includes(iconNumber)) {
+      // Determine time variant character
+      let variant = 'd'; // default to day
+      
+      if (timeVariant === 'night') {
+        variant = 'n';
+      } else if (timeVariant === 'polartwilight') {
+        variant = 'm';
+      } else if (!timeVariant) {
+        // No time variant provided, determine based on current time
+        const hour = new Date().getHours();
+        variant = (hour >= 6 && hour < 20) ? 'd' : 'n';
+      }
+      
+      // Construct file path with variant
+      const theme = darkMode ? 'darkmode' : 'lightmode';
+      return `/assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
+    } else {
+      // Icon doesn't have time variants, just use the number
+      const theme = darkMode ? 'darkmode' : 'lightmode';
+      return `/assets/weatherIcons/${theme}/${iconNumber}.svg`;
+    }
   };
 
   const displayTemperature = (temp) => {
