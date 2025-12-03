@@ -1,3 +1,179 @@
+# VærVarsel - Modern Weather Forecast App
+
+A beautiful, modern weather forecast application built with React and Vite, featuring real-time weather data from the Norwegian Meteorological Institute (MET Norway).
+
+## Features
+
+- **Real-time Weather Data**: Current conditions and forecasts from MET Norway API
+- **7-Day Forecast**: View weather predictions for the next week with interactive day selection
+- **24-Hour Detailed View**: Temperature, precipitation, and wind speed graphs for any selected day
+- **Nowcast Integration**: Minute-by-minute precipitation forecast for the next 2 hours
+- **Multi-language Support**: Norwegian (Bokmål), Norwegian (Nynorsk), and English
+- **Dark/Light Mode**: Toggle between themes with system preference detection
+- **Responsive Design**: Optimized for mobile, tablet, and desktop
+- **Glass Morphism UI**: Modern, beautiful interface with backdrop blur effects
+- **Location-based**: Automatically detects your location for accurate forecasts
+
+## Tech Stack
+
+- **React 18** - UI library
+- **Vite** - Build tool and dev server
+- **CSS Custom Properties** - Design tokens and theming
+- **Geolocation API** - User location detection
+- **MET Norway APIs**:
+  - Locationforecast 2.0 - Weather forecasts
+  - Nowcast 2.0 - Short-term precipitation
+  - OpenStreetMap Nominatim - Reverse geocoding
+
+## Project Structure
+
+```
+viteweatherforecast/
+├── public/
+│   └── assets/
+│       ├── heroBackgrounds/
+│       ├── logo/
+│       └── weatherIcons/
+│           ├── lightmode/
+│           └── darkmode/
+├── src/
+│   ├── components/
+│   │   ├── Hero/
+│   │   ├── SideMenu/
+│   │   ├── TabNavigation/
+│   │   ├── WeatherCard/
+│   │   ├── WeatherGraph/
+│   │   └── WeeklyForecast/
+│   ├── contexts/
+│   │   └── LanguageContext.jsx
+│   ├── services/
+│   │   ├── locationService.js
+│   │   ├── weatherService.js
+│   │   ├── nowcastService.js
+│   │   └── geocodingService.js
+│   ├── utils/
+│   │   ├── translations.js
+│   │   └── weatherDescriptions.js
+│   ├── App.jsx
+│   ├── App.css
+│   └── main.jsx
+└── package.json
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16+ and npm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd viteweatherforecast
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## New Features
+
+### Weekly Forecast Component
+
+The app now includes a comprehensive weekly forecast that shows:
+
+- **8-Day Overview**: Today plus 7 upcoming days
+- **Day Selection**: Click any day to view its detailed 24-hour forecast
+- **Temperature Range**: Max and min temperatures for each day
+- **Weather Icons**: Visual representation of expected conditions
+- **Smooth Transitions**: Graphs update dynamically when selecting different days
+
+### Enhanced Precipitation Data
+
+- **Nowcast Integration**: First 2 hours show minute-by-minute data from Nowcast API
+- **Seamless Transition**: After 2 hours, switches to hourly forecast data
+- **Day-Specific Views**: Select any day to see its precipitation forecast
+
+### Interactive Graphs
+
+- **Temperature Graph**: 24-hour temperature trends
+- **Precipitation Graph**: Hourly precipitation amounts with nowcast integration
+- **Wind Graph**: Wind speed variations throughout the day
+- **Responsive SVG**: Scales beautifully on all screen sizes
+
+## API Usage
+
+This app uses free, public APIs from the Norwegian Meteorological Institute:
+
+- No API key required
+- Rate limits apply
+- Please follow MET Norway's [terms of service](https://api.met.no/doc/TermsOfService)
+
+## Browser Support
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Permissions
+
+The app requires:
+- **Location Access**: To fetch weather data for your current location
+
+## Design System
+
+The app uses a comprehensive design token system with CSS custom properties:
+
+- **Colors**: Background, text, glass morphism, graph colors
+- **Spacing**: Consistent spacing scale (xs to 7xl)
+- **Typography**: Font sizes, weights, letter spacing
+- **Effects**: Border radius, shadows, backdrop blur
+- **Transitions**: Consistent animation timing
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Credits
+
+- Weather data: [MET Norway](https://api.met.no/)
+- Weather icons: Based on MET Norway's weather symbols
+- Geocoding: OpenStreetMap Nominatim
+
+## Contact
+
+For questions or feedback, please open an issue on GitHub.
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

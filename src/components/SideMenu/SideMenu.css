@@ -1,22 +1,22 @@
 /* src/components/SideMenu/SideMenu.css */
 
-/* Backdrop */
-.menu-backdrop {
+/* Overlay */
+.menu-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: var(--color-bg-overlay);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  z-index: 998;
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-base);
-  z-index: 998;
+  transition: opacity var(--transition-base), visibility var(--transition-base);
 }
 
-.menu-backdrop.active {
+.menu-overlay.active {
   opacity: 1;
   visibility: visible;
 }
@@ -33,11 +33,12 @@
   backdrop-filter: var(--backdrop-blur-md);
   -webkit-backdrop-filter: var(--backdrop-blur-md);
   border-left: 1px solid var(--color-glass-border-strong);
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+  z-index: 999;
   transform: translateX(100%);
   transition: transform var(--transition-base);
-  z-index: 999;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
 }
 
 .side-menu.open {
@@ -49,7 +50,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-4xl) var(--spacing-3xl);
+  padding: var(--spacing-4xl);
   border-bottom: 1px solid var(--color-glass-border);
 }
 
@@ -61,12 +62,13 @@
 }
 
 .close-button {
+  background: none;
+  border: none;
   padding: var(--spacing-md);
-  background: var(--color-glass-bg);
-  border: 1px solid var(--color-glass-border);
-  border-radius: var(--radius-sm);
   cursor: pointer;
+  color: var(--color-text-icon);
   transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,28 +82,30 @@
   transform: scale(0.95);
 }
 
-.close-button .icon {
+.close-icon {
   width: var(--icon-size-lg);
   height: var(--icon-size-lg);
-  color: var(--color-text-primary);
 }
 
 /* Menu Content */
 .menu-content {
-  padding: var(--spacing-4xl) var(--spacing-3xl);
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-4xl);
 }
 
+/* Menu Section */
 .menu-section {
   margin-bottom: var(--spacing-5xl);
 }
 
 .section-title {
   font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
-  margin: 0 0 var(--spacing-3xl) 0;
+  margin: 0 0 var(--spacing-2xl) 0;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 /* Language Options */
@@ -111,70 +115,47 @@
   gap: var(--spacing-md);
 }
 
-.language-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-3xl) var(--spacing-2xl);
+.language-button {
+  width: 100%;
+  padding: var(--spacing-2xl);
   background: var(--color-glass-bg);
   border: 1px solid var(--color-glass-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
   cursor: pointer;
   transition: all var(--transition-fast);
   text-align: left;
-  width: 100%;
 }
 
-.language-option:hover {
+.language-button:hover {
   background: var(--color-glass-bg-hover);
-  border-color: var(--color-glass-border-strong);
-}
-
-.language-option.active {
-  background: var(--color-glass-bg-hover);
-  border-color: var(--color-text-icon);
-}
-
-.language-name {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
 }
 
-.check-icon {
-  width: var(--icon-size-md);
-  height: var(--icon-size-md);
-  color: var(--color-text-icon);
-  flex-shrink: 0;
+.language-button.active {
+  background: var(--color-glass-bg-strong);
+  border-color: var(--color-glass-border-strong);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 /* Responsive Design - Tablet and Up */
 @media (min-width: 640px) {
   .side-menu {
-    max-width: 380px;
+    max-width: 360px;
   }
 
   .menu-header {
-    padding: var(--spacing-5xl) var(--spacing-4xl);
+    padding: var(--spacing-5xl);
+  }
+
+  .menu-content {
+    padding: var(--spacing-5xl);
   }
 
   .menu-title {
     font-size: var(--font-size-2xl);
-  }
-
-  .menu-content {
-    padding: var(--spacing-5xl) var(--spacing-4xl);
-  }
-
-  .section-title {
-    font-size: var(--font-size-lg);
-  }
-
-  .language-option {
-    padding: var(--spacing-4xl) var(--spacing-3xl);
-  }
-
-  .language-name {
-    font-size: var(--font-size-md);
   }
 }

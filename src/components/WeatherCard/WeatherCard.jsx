@@ -9,6 +9,7 @@ import { getTranslation } from '../../utils/translations';
 import { getWeatherDescription } from '../../utils/weatherDescriptions';
 import TabNavigation from '../TabNavigation/TabNavigation';
 import WeatherGraph from '../WeatherGraph/WeatherGraph';
+import WeeklyForecast from '../WeeklyForecast/WeeklyForecast';
 import './WeatherCard.css';
 
 const WeatherCard = ({ darkMode, onRefresh }) => {
@@ -19,6 +20,7 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
   const [precipitationData, setPrecipitationData] = useState(null);
   const [isFahrenheit, setIsFahrenheit] = useState(false);
   const [activeTab, setActiveTab] = useState('temperature');
+  const [selectedDay, setSelectedDay] = useState(new Date());
   const { language } = useLanguage();
 
   const t = (key) => getTranslation(language, key);
@@ -37,6 +39,7 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
 
       setWeatherData(weather);
       setLocationName(location);
+      setSelectedDay(new Date()); // Reset to today when refreshing
 
       try {
         const nowcast = await getNowcastData(latitude, longitude);
@@ -63,10 +66,9 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
     }
   }, [onRefresh]);
 
-const getWeatherIcon = (symbolCode) => {
+  const getWeatherIcon = (symbolCode) => {
     if (!symbolCode) return null;
 
-    // Map MET Norway weather symbols to icon numbers
     const iconMap = {
       'clearsky': '01',
       'fair': '02',
@@ -111,47 +113,37 @@ const getWeatherIcon = (symbolCode) => {
       'heavysnow': '50'
     };
 
-    // Icons that have day/night/polartwilight variants (contain sun/moon)
     const iconsWithTimeVariants = ['01', '02', '03', '05', '06', '07', '08', '24', '25', '26', '27', '28', '29', '40', '41', '42', '43', '44', '45'];
 
     let weatherType;
     let timeVariant;
 
-    // Check if symbol code contains underscore
     if (symbolCode.includes('_')) {
-      // Parse symbol code with time variant
       const parts = symbolCode.split('_');
       timeVariant = parts[parts.length - 1];
       weatherType = parts.slice(0, -1).join('_');
     } else {
-      // No time variant in symbol code, use the whole thing
       weatherType = symbolCode;
       timeVariant = null;
     }
 
-    // Get icon number from map
     const iconNumber = iconMap[weatherType] || '01';
     
-    // Check if this icon needs a time variant
     if (iconsWithTimeVariants.includes(iconNumber)) {
-      // Determine time variant character
-      let variant = 'd'; // default to day
+      let variant = 'd';
       
       if (timeVariant === 'night') {
         variant = 'n';
       } else if (timeVariant === 'polartwilight') {
         variant = 'm';
       } else if (!timeVariant) {
-        // No time variant provided, determine based on current time
         const hour = new Date().getHours();
         variant = (hour >= 6 && hour < 20) ? 'd' : 'n';
       }
       
-      // Construct file path with variant
       const theme = darkMode ? 'darkmode' : 'lightmode';
       return `/assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
     } else {
-      // Icon doesn't have time variants, just use the number
       const theme = darkMode ? 'darkmode' : 'lightmode';
       return `/assets/weatherIcons/${theme}/${iconNumber}.svg`;
     }
@@ -161,6 +153,10 @@ const getWeatherIcon = (symbolCode) => {
     return isFahrenheit 
       ? Math.round(celsiusToFahrenheit(temp))
       : Math.round(temp);
+  };
+
+  const handleDaySelect = (date) => {
+    setSelectedDay(date);
   };
 
   if (loading) {
@@ -258,7 +254,6 @@ const getWeatherIcon = (symbolCode) => {
 
           {/* Weather Details */}
           <div className="weather-details">
-            {/* Feels Like - Only show if available */}
             {weatherData.feelsLike !== undefined && (
               <div className="detail-item">
                 <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -297,12 +292,24 @@ const getWeatherIcon = (symbolCode) => {
           <div className="graph-container">
             <WeatherGraph 
               type={activeTab}
-              data={weatherData.forecast24h}
+              hourlyData={weatherData.hourlyForecast}
               precipitationData={precipitationData}
+              selectedDay={selectedDay}
             />
           </div>
         </div>
       </div>
+
+      {/* Weekly Forecast */}
+      {weatherData.dailyForecast && weatherData.dailyForecast.length > 0 && (
+        <WeeklyForecast
+          dailyForecast={weatherData.dailyForecast}
+          selectedDay={selectedDay}
+          onDaySelect={handleDaySelect}
+          isFahrenheit={isFahrenheit}
+          darkMode={darkMode}
+        />
+      )}
     </div>
   );
 };

@@ -4,25 +4,90 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { getTranslation } from '../../utils/translations';
 import './WeatherGraph.css';
 
-const WeatherGraph = ({ type, data, precipitationData }) => {
+const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
   const { language } = useLanguage();
   const t = (key) => getTranslation(language, key);
 
   const getChartData = () => {
-    if (type === 'precipitation' && precipitationData) {
-      return precipitationData.slice(0, 24).map(item => ({
-        label: `${String(item.hour).padStart(2, '0')}:${String(item.minute).padStart(2, '0')}`,
-        value: item.precipitation,
-        unit: 'mm'
-      }));
+    if (!hourlyData || hourlyData.length === 0) return [];
+
+    // Filter hourly data for the selected day (24 hours)
+    const selectedDateString = selectedDay.toDateString();
+    const dayData = hourlyData.filter(item => 
+      item.date === selectedDateString
+    ).slice(0, 24);
+
+    if (type === 'precipitation') {
+      // Merge nowcast data (first 2 hours) with hourly forecast data
+      const currentTime = new Date();
+      const twoHoursFromNow = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
+      
+      let mergedData = [];
+
+      // Check if selected day is today
+      const isToday = selectedDateString === currentTime.toDateString();
+
+      if (isToday && precipitationData && precipitationData.length > 0) {
+        // Use nowcast data for the first 2 hours
+        const nowcastHourly = [];
+        const currentHour = currentTime.getHours();
+        
+        // Group nowcast data by hour and sum precipitation
+        precipitationData.forEach(item => {
+          const itemTime = new Date(item.time);
+          if (itemTime <= twoHoursFromNow) {
+            const hour = itemTime.getHours();
+            const existingHour = nowcastHourly.find(h => h.hour === hour);
+            
+            if (existingHour) {
+              existingHour.precipitation += item.precipitation;
+            } else {
+              nowcastHourly.push({
+                hour: hour,
+                precipitation: item.precipitation,
+                isNowcast: true
+              });
+            }
+          }
+        });
+
+        mergedData = nowcastHourly.map(item => ({
+          label: `${String(item.hour).padStart(2, '0')}:00`,
+          value: item.precipitation,
+          unit: 'mm'
+        }));
+
+        // Add remaining hours from hourly forecast (after 2 hours)
+        const remainingHours = dayData.filter(item => {
+          const itemTime = new Date(item.time);
+          return itemTime > twoHoursFromNow;
+        });
+
+        remainingHours.forEach(item => {
+          mergedData.push({
+            label: `${String(item.hour).padStart(2, '0')}:00`,
+            value: item.precipitation,
+            unit: 'mm'
+          });
+        });
+      } else {
+        // Not today or no nowcast data, use all hourly data
+        mergedData = dayData.map(item => ({
+          label: `${String(item.hour).padStart(2, '0')}:00`,
+          value: item.precipitation,
+          unit: 'mm'
+        }));
+      }
+
+      return mergedData;
     } else if (type === 'temperature') {
-      return data.map(item => ({
+      return dayData.map(item => ({
         label: `${String(item.hour).padStart(2, '0')}:00`,
         value: item.temperature,
         unit: '°C'
       }));
     } else if (type === 'wind') {
-      return data.map(item => ({
+      return dayData.map(item => ({
         label: `${String(item.hour).padStart(2, '0')}:00`,
         value: item.windSpeed,
         unit: 'm/s'
@@ -41,9 +106,7 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
     );
   }
 
-  // Get color based on type using CSS variables
   const getColor = () => {
-    // Get computed CSS variable values
     const root = document.documentElement;
     const computedStyle = getComputedStyle(root);
     
@@ -73,26 +136,22 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
 
   const colors = getColor();
 
-  // Calculate dimensions
   const width = 400;
   const height = 180;
   const padding = { top: 20, right: 10, bottom: 30, left: 10 };
   const graphWidth = width - padding.left - padding.right;
   const graphHeight = height - padding.top - padding.bottom;
 
-  // Calculate scale
   const maxValue = Math.max(...chartData.map(d => d.value));
   const minValue = Math.min(...chartData.map(d => d.value), 0);
   const range = maxValue - minValue || 1;
 
-  // Generate points for the area
   const points = chartData.map((item, index) => {
     const x = padding.left + (index / (chartData.length - 1)) * graphWidth;
     const y = padding.top + graphHeight - ((item.value - minValue) / range) * graphHeight;
     return { x, y, value: item.value, label: item.label };
   });
 
-  // Create SVG path for area
   const createAreaPath = () => {
     if (points.length === 0) return '';
     
@@ -109,7 +168,6 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
     return path;
   };
 
-  // Create SVG path for line
   const createLinePath = () => {
     if (points.length === 0) return '';
     
@@ -129,14 +187,12 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="none"
       >
-        {/* Area fill */}
         <path
           d={createAreaPath()}
           fill={colors.fill}
           className="area-path"
         />
         
-        {/* Line stroke */}
         <path
           d={createLinePath()}
           fill="none"
@@ -145,7 +201,6 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
           className="line-path"
         />
         
-        {/* Data points */}
         {points.map((point, index) => {
           const showLabel = index % 3 === 0;
           return (

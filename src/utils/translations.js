@@ -31,6 +31,10 @@ export const translations = {
     nynorsk: 'Nynorsk',
     english: 'Engelsk',
     
+    // Days of week (abbreviated)
+    days: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
+    today: 'I dag',
+    
     // Units
     celsius: '°C',
     fahrenheit: '°F',
@@ -69,6 +73,10 @@ export const translations = {
     nynorsk: 'Nynorsk',
     english: 'Engelsk',
     
+    // Days of week (abbreviated)
+    days: ['Søn', 'Mån', 'Tys', 'Ons', 'Tor', 'Fre', 'Lau'],
+    today: 'I dag',
+    
     // Units
     celsius: '°C',
     fahrenheit: '°F',
@@ -106,6 +114,10 @@ export const translations = {
     norwegian: 'Norwegian',
     nynorsk: 'Nynorsk',
     english: 'English',
+    
+    // Days of week (abbreviated)
+    days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    today: 'Today',
     
     // Units
     celsius: '°C',
