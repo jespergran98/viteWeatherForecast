@@ -3,11 +3,7 @@
 /* Hero Container */
 .hero-container {
   min-height: 100vh;
-  transition: background-color 0.3s ease;
-}
-
-.hero-container.dark-mode {
-  background-color: #1a1a2e;
+  transition: background-color var(--transition-base);
 }
 
 /* Hero Background */
@@ -15,7 +11,7 @@
   position: relative;
   min-height: 100vh;
   background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    linear-gradient(var(--color-bg-overlay), var(--color-bg-overlay)),
     url('/assets/heroBackgrounds/placeholder.jpg');
   background-size: cover;
   background-position: center;
@@ -29,11 +25,11 @@
   left: 0;
   right: 0;
   z-index: 10;
-  padding: 1.5rem 1rem;
+  padding: var(--spacing-4xl) var(--spacing-2xl);
 }
 
 .navbar-content {
-  max-width: 1280px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -44,59 +40,59 @@
 .logo-section {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--spacing-xl);
 }
 
 .logo-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 0.5rem;
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
+  background: var(--color-glass-bg-strong);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--color-glass-border-strong);
 }
 
 .logo-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 0.25rem;
+  padding: var(--spacing-xs);
 }
 
 .logo-text {
   color: white;
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 /* Navigation Actions */
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-md);
 }
 
 .nav-btn {
-  padding: 0.625rem;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 0.5rem;
+  padding: var(--spacing-lg);
+  background: var(--color-glass-bg-strong);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  border: 1px solid var(--color-glass-border-strong);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .nav-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--color-glass-bg-hover);
 }
 
 .nav-btn:active {
@@ -104,13 +100,13 @@
 }
 
 .icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
   color: white;
 }
 
 .refresh-icon {
-  transition: transform 0.5s ease;
+  transition: transform var(--transition-slow);
 }
 
 .nav-btn:hover .refresh-icon {
@@ -123,23 +119,23 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 6rem 1rem 2rem;
+  padding: 6rem var(--spacing-2xl) var(--spacing-5xl);
 }
 
 /* Glass Card */
 .glass-card {
   width: 100%;
-  max-width: 32rem;
+  max-width: var(--container-sm);
 }
 
 .card-inner {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  padding: 2rem 1.5rem;
+  background: var(--color-glass-bg);
+  backdrop-filter: var(--backdrop-blur-md);
+  -webkit-backdrop-filter: var(--backdrop-blur-md);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-xl);
+  padding: var(--spacing-5xl) var(--spacing-4xl);
   min-height: 28rem;
   display: flex;
   align-items: center;
@@ -149,54 +145,54 @@
 /* Responsive Design - Tablet */
 @media (min-width: 640px) {
   .navbar {
-    padding: 1.5rem;
+    padding: var(--spacing-4xl);
   }
   
   .logo-icon {
-    width: 3rem;
-    height: 3rem;
+    width: var(--icon-size-2xl);
+    height: var(--icon-size-2xl);
   }
   
   .logo-text {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
   }
   
   .nav-actions {
-    gap: 0.75rem;
+    gap: var(--spacing-xl);
   }
   
   .card-inner {
-    padding: 2.5rem 2rem;
+    padding: var(--spacing-6xl) var(--spacing-5xl);
     min-height: 30rem;
   }
   
   .glass-card {
-    max-width: 42rem;
+    max-width: var(--container-md);
   }
 }
 
 /* Responsive Design - Desktop */
 @media (min-width: 1024px) {
   .navbar {
-    padding: 2rem;
+    padding: var(--spacing-5xl);
   }
   
   .glass-card {
-    max-width: 56rem;
+    max-width: var(--container-lg);
   }
   
   .card-inner {
-    padding: 3rem 2.5rem;
+    padding: var(--spacing-7xl) var(--spacing-6xl);
     min-height: 32rem;
   }
 }
 
 @media (min-width: 1280px) {
   .glass-card {
-    max-width: 64rem;
+    max-width: var(--container-xl);
   }
   
   .card-inner {
-    padding: 3.5rem 3rem;
+    padding: 3.5rem var(--spacing-7xl);
   }
 }

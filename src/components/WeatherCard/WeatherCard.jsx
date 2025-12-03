@@ -4,8 +4,8 @@ import { getUserLocation } from '../../services/locationService';
 import { getWeatherData, celsiusToFahrenheit } from '../../services/weatherService';
 import { getLocationName } from '../../services/geocodingService';
 import { getNowcastData } from '../../services/nowcastService';
-import TabNavigation from '../TabNavigation/TabNavigation';
-import WeatherGraph from '../WeatherGraph/WeatherGraph';
+import TabNavigation from '../tabNavigation/tabNavigation';
+import WeatherGraph from '../weatherGraph/weatherGraph';
 import './WeatherCard.css';
 
 const WeatherCard = ({ darkMode, onRefresh }) => {

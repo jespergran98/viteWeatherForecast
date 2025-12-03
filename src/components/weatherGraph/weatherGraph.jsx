@@ -36,13 +36,33 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
     );
   }
 
-  // Get color based on type
+  // Get color based on type using CSS variables
   const getColor = () => {
+    // Get computed CSS variable values
+    const root = document.documentElement;
+    const computedStyle = getComputedStyle(root);
+    
     switch(type) {
-      case 'temperature': return { fill: 'rgba(255, 193, 7, 0.3)', stroke: 'rgba(255, 193, 7, 1)' };
-      case 'precipitation': return { fill: 'rgba(33, 150, 243, 0.3)', stroke: 'rgba(33, 150, 243, 1)' };
-      case 'wind': return { fill: 'rgba(156, 39, 176, 0.3)', stroke: 'rgba(156, 39, 176, 1)' };
-      default: return { fill: 'rgba(255, 255, 255, 0.3)', stroke: 'rgba(255, 255, 255, 1)' };
+      case 'temperature': 
+        return { 
+          fill: computedStyle.getPropertyValue('--color-graph-temperature-fill').trim() || 'rgba(255, 193, 7, 0.3)', 
+          stroke: computedStyle.getPropertyValue('--color-graph-temperature-stroke').trim() || 'rgba(255, 193, 7, 1)' 
+        };
+      case 'precipitation': 
+        return { 
+          fill: computedStyle.getPropertyValue('--color-graph-precipitation-fill').trim() || 'rgba(33, 150, 243, 0.3)', 
+          stroke: computedStyle.getPropertyValue('--color-graph-precipitation-stroke').trim() || 'rgba(33, 150, 243, 1)' 
+        };
+      case 'wind': 
+        return { 
+          fill: computedStyle.getPropertyValue('--color-graph-wind-fill').trim() || 'rgba(156, 39, 176, 0.3)', 
+          stroke: computedStyle.getPropertyValue('--color-graph-wind-stroke').trim() || 'rgba(156, 39, 176, 1)' 
+        };
+      default: 
+        return { 
+          fill: 'rgba(255, 255, 255, 0.3)', 
+          stroke: 'rgba(255, 255, 255, 1)' 
+        };
     }
   };
 

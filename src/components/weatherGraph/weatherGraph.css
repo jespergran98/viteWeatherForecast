@@ -12,15 +12,15 @@
 }
 
 .area-path {
-  transition: fill 0.3s ease;
+  transition: fill var(--transition-base);
 }
 
 .line-path {
-  transition: stroke 0.3s ease;
+  transition: stroke var(--transition-base);
 }
 
 .data-point {
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .data-point:hover {
@@ -30,13 +30,13 @@
 
 .point-value {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   pointer-events: none;
 }
 
 .point-label {
   font-size: 10px;
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   pointer-events: none;
 }
 
@@ -45,9 +45,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 2rem;
-  font-size: 0.875rem;
+  color: var(--color-text-quaternary);
+  padding: var(--spacing-5xl);
+  font-size: var(--font-size-base);
   height: 100%;
 }
 

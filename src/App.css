@@ -1,3 +1,189 @@
+/* ==========================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ========================================== */
+
+:root {
+  /* === Color Palette === */
+  /* Background Colors */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f5f5f5;
+  --color-bg-tertiary: #1a1a2e;
+  --color-bg-overlay: rgba(0, 0, 0, 0.3);
+  
+  /* Glass Morphism */
+  --color-glass-bg: rgba(255, 255, 255, 0.1);
+  --color-glass-bg-strong: rgba(255, 255, 255, 0.2);
+  --color-glass-bg-hover: rgba(255, 255, 255, 0.3);
+  --color-glass-border: rgba(255, 255, 255, 0.2);
+  --color-glass-border-strong: rgba(255, 255, 255, 0.3);
+  
+  /* Text Colors */
+  --color-text-primary: rgba(255, 255, 255, 0.95);
+  --color-text-secondary: rgba(255, 255, 255, 0.85);
+  --color-text-tertiary: rgba(255, 255, 255, 0.7);
+  --color-text-quaternary: rgba(255, 255, 255, 0.6);
+  --color-text-disabled: rgba(255, 255, 255, 0.5);
+  --color-text-icon: rgba(255, 255, 255, 0.9);
+  
+  /* Graph Colors */
+  --color-graph-temperature-fill: rgba(255, 193, 7, 0.3);
+  --color-graph-temperature-stroke: rgba(255, 193, 7, 1);
+  --color-graph-precipitation-fill: rgba(33, 150, 243, 0.3);
+  --color-graph-precipitation-stroke: rgba(33, 150, 243, 1);
+  --color-graph-wind-fill: rgba(156, 39, 176, 0.3);
+  --color-graph-wind-stroke: rgba(156, 39, 176, 1);
+  
+  /* Tab Navigation */
+  --color-tab-bg: rgba(255, 255, 255, 0.08);
+  --color-tab-bg-hover: rgba(255, 255, 255, 0.05);
+  --color-tab-bg-active: rgba(255, 255, 255, 0.15);
+  --color-tab-text-inactive: rgba(255, 255, 255, 0.6);
+  --color-tab-text-active: white;
+  
+  /* Status Colors */
+  --color-error: rgba(255, 100, 100, 0.9);
+  --color-error-bg: rgba(255, 100, 100, 0.1);
+  
+  /* === Spacing === */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.375rem;   /* 6px */
+  --spacing-md: 0.5rem;     /* 8px */
+  --spacing-lg: 0.625rem;   /* 10px */
+  --spacing-xl: 0.75rem;    /* 12px */
+  --spacing-2xl: 1rem;      /* 16px */
+  --spacing-3xl: 1.25rem;   /* 20px */
+  --spacing-4xl: 1.5rem;    /* 24px */
+  --spacing-5xl: 2rem;      /* 32px */
+  --spacing-6xl: 2.5rem;    /* 40px */
+  --spacing-7xl: 3rem;      /* 48px */
+  
+  /* === Typography === */
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.8rem;     /* 12.8px */
+  --font-size-base: 0.875rem; /* 14px */
+  --font-size-md: 0.95rem;    /* 15.2px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 3rem;      /* 48px */
+  --font-size-4xl: 3.5rem;    /* 56px */
+  --font-size-5xl: 4rem;      /* 64px */
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: 0.02em;
+  
+  /* === Border Radius === */
+  --radius-sm: 0.5rem;    /* 8px */
+  --radius-md: 0.625rem;  /* 10px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1.5rem;    /* 24px */
+  
+  /* === Shadows === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-drop: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+  /* === Effects === */
+  --backdrop-blur-sm: blur(10px);
+  --backdrop-blur-md: blur(20px);
+  
+  /* === Transitions === */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* === Dimensions === */
+  --icon-size-sm: 1rem;      /* 16px */
+  --icon-size-md: 1.125rem;  /* 18px */
+  --icon-size-lg: 1.25rem;   /* 20px */
+  --icon-size-xl: 2.5rem;    /* 40px */
+  --icon-size-2xl: 3rem;     /* 48px */
+  
+  /* Weather Icon Sizes */
+  --weather-icon-sm: 5rem;   /* 80px */
+  --weather-icon-md: 6rem;   /* 96px */
+  --weather-icon-lg: 7rem;   /* 112px */
+  
+  /* Container Max Widths */
+  --container-sm: 32rem;   /* 512px */
+  --container-md: 42rem;   /* 672px */
+  --container-lg: 56rem;   /* 896px */
+  --container-xl: 64rem;   /* 1024px */
+  --container-max: 1280px;
+}
+
+/* ==========================================
+   DARK MODE OVERRIDES
+   ========================================== */
+
+:root.dark-mode {
+  /* Background Colors */
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-tertiary: #0f0f1e;
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Glass Morphism - Darker in dark mode */
+  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-bg-strong: rgba(255, 255, 255, 0.1);
+  --color-glass-bg-hover: rgba(255, 255, 255, 0.15);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-border-strong: rgba(255, 255, 255, 0.2);
+  
+  /* Text Colors - Slightly dimmed in dark mode */
+  --color-text-primary: rgba(255, 255, 255, 0.9);
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-text-tertiary: rgba(255, 255, 255, 0.65);
+  --color-text-quaternary: rgba(255, 255, 255, 0.5);
+  --color-text-disabled: rgba(255, 255, 255, 0.4);
+  
+  /* Tab Navigation - Darker */
+  --color-tab-bg: rgba(255, 255, 255, 0.05);
+  --color-tab-bg-hover: rgba(255, 255, 255, 0.08);
+  --color-tab-bg-active: rgba(255, 255, 255, 0.12);
+  
+  /* Shadows - More prominent in dark mode */
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* System Preference Support */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) {
+    /* Same overrides as .dark-mode */
+    --color-bg-primary: #1a1a2e;
+    --color-bg-secondary: #16213e;
+    --color-bg-tertiary: #0f0f1e;
+    --color-bg-overlay: rgba(0, 0, 0, 0.5);
+    --color-glass-bg: rgba(255, 255, 255, 0.05);
+    --color-glass-bg-strong: rgba(255, 255, 255, 0.1);
+    --color-glass-bg-hover: rgba(255, 255, 255, 0.15);
+    --color-glass-border: rgba(255, 255, 255, 0.1);
+    --color-glass-border-strong: rgba(255, 255, 255, 0.2);
+    --color-text-primary: rgba(255, 255, 255, 0.9);
+    --color-text-secondary: rgba(255, 255, 255, 0.8);
+    --color-text-tertiary: rgba(255, 255, 255, 0.65);
+    --color-text-quaternary: rgba(255, 255, 255, 0.5);
+    --color-text-disabled: rgba(255, 255, 255, 0.4);
+    --color-tab-bg: rgba(255, 255, 255, 0.05);
+    --color-tab-bg-hover: rgba(255, 255, 255, 0.08);
+    --color-tab-bg-active: rgba(255, 255, 255, 0.12);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ==========================================
+   GLOBAL RESETS & BASE STYLES
+   ========================================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -10,6 +196,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-primary);
+  transition: background-color var(--transition-base);
 }
 
 .app {

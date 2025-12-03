@@ -3,8 +3,7 @@ import React, { useState } from 'react'
 import WeatherCard from '../WeatherCard/WeatherCard'
 import './Hero.css'
 
-const Hero = () => {
-  const [darkMode, setDarkMode] = useState(false)
+const Hero = ({ darkMode, setDarkMode }) => {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   const handleRefresh = () => {
@@ -12,7 +11,7 @@ const Hero = () => {
   }
 
   return (
-    <div className={`hero-container ${darkMode ? 'dark-mode' : ''}`}>
+    <div className="hero-container">
       {/* Hero Background */}
       <div className="hero-background">
         
