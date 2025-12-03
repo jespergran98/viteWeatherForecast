@@ -138,3 +138,47 @@ src/
   }
 }
 ```
+
+---
+
+Hva kan forbedres med YR?
+
+1. Gir ingen informasjon om brukeren's nåværende posisjon med mindre brukeren søker
+2. Ingen hero seksjon
+3. Unødvendig vanskelig å finne søkeknappen for å legge til steder
+4. For lys side med for lyse elementer
+5. Forsiden viser kun temperatur informasjon for i dag og neste 3 dager uten noe detaljer om været i brukeren's posisjon.
+
+nettsider å se på:
+yr:
+https://www.yr.no/nb
+accuweather:
+https://www.accuweather.com
+google:
+https://www.google.com/search?q=weather&client=opera-gx&hs=RBS&sca_esv=e472ae4fb423b2b1&sxsrf=AE3TifNVlD149q7zaOVkfVfb12G0ib9Gag%3A1764749430587&ei=dvAvabTLI4D-wPAPvfOrqQc&ved=0ahUKEwi03rX3-6CRAxUAPxAIHb35KnUQ4dUDCBE&uact=5&oq=weather&gs_lp=Egxnd3Mtd2l6LXNlcnAiB3dlYXRoZXIyChAjGIAEGCcYigUyChAjGIAEGCcYigUyDRAAGIAEGEMYyQMYigUyChAAGIAEGEMYigUyCxAAGIAEGJIDGMsBMgsQABiABBiSAxjLATIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEAAYgAQYQxiKBTIKEC4YgAQYQxiKBUj0CFCuAliuAnACeACQAQCYAVmgAZoBqgEBMrgBA8gBAPgBAZgCA6ACa8ICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIZEC4YgAQYsAMY0QMYQxjHARjIAxiKBdgBAZgDAIgGAZAGC7oGBAgBGAiSBwEzoAegFbIHATG4B2DCBwMyLTPIBw4&sclient=gws-wiz-serp
+weather.com:
+https://weather.com/weather/today/l/eff5dbd1131d012599ff5698685a00e6d2b1db2f5a7ddc3a561129287970a089
+
+---
+
+Hero konsept:
+
+Hero:
+bakgrunn endres basert på hva slags vær det er, på midten av heroen er en glassplate som viser været i brukeren's posisjon.
+
+glassplaten:
+
+venstre kolonne:
+top til venstre:
+brukeren's lokasjon
+stor til venstre under lokasjon:
+værikon og temperatur (°C°F)
+mindre til høyre for værikon og temperatur: føles som x, nedør mm, wind m/s.
+
+Høyre kolonne:
+graf med forskjellig informasjon:
+temperatur neste 24 timer (default)
+nedbør neste 24 timer
+vind neste 24 timer
+
+VærVarsel.no?
