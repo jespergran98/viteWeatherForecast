@@ -63,6 +63,7 @@ https://api.met.no/weatherapi/textforecast/2.0/landoverview
 Nominatim (OpenStreetMap) → stedsøk (gratis, ingen nøkkel)
 https://nominatim.openstreetmap.org/search?q=Oslo&format=json
 Værikoner → lastet ned fra https://github.com/metno/weathericons
+https://nrkno.github.io/yr-weather-symbols/
 
 ## Clean file structure:
 
@@ -165,6 +166,7 @@ Hero konsept:
 
 Hero:
 bakgrunn endres basert på hva slags vær det er, på midten av heroen er en glassplate som viser været i brukeren's posisjon.
+helt på toppen av heroen over glassplaten er en logo og navn på venstre side, og en hamburger knapp på høyre side.
 
 glassplaten:
 
