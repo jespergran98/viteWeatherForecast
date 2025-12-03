@@ -1,9 +1,6 @@
 // src/components/WeatherCard/WeatherCard.jsx
 import React, { useState, useEffect } from 'react';
-import { getUserLocation } from '../../services/locationService';
-import { getWeatherData, celsiusToFahrenheit } from '../../services/weatherService';
-import { getLocationName } from '../../services/geocodingService';
-import { getNowcastData } from '../../services/nowcastService';
+import { celsiusToFahrenheit } from '../../services/weatherService';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getTranslation } from '../../utils/translations';
 import { getWeatherDescription } from '../../utils/weatherDescriptions';
@@ -12,12 +9,14 @@ import WeatherGraph from '../WeatherGraph/WeatherGraph';
 import WeeklyForecast from '../WeeklyForecast/WeeklyForecast';
 import './WeatherCard.css';
 
-const WeatherCard = ({ darkMode, onRefresh }) => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [weatherData, setWeatherData] = useState(null);
-  const [locationName, setLocationName] = useState('');
-  const [precipitationData, setPrecipitationData] = useState(null);
+const WeatherCard = ({ 
+  darkMode, 
+  weatherData, 
+  locationName, 
+  precipitationData,
+  loading,
+  error 
+}) => {
   const [isFahrenheit, setIsFahrenheit] = useState(false);
   const [activeTab, setActiveTab] = useState('temperature');
   const [selectedDay, setSelectedDay] = useState(new Date());
@@ -25,46 +24,12 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
 
   const t = (key) => getTranslation(language, key);
 
-  const fetchWeatherData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const { latitude, longitude } = await getUserLocation();
-
-      const [weather, location] = await Promise.all([
-        getWeatherData(latitude, longitude),
-        getLocationName(latitude, longitude)
-      ]);
-
-      setWeatherData(weather);
-      setLocationName(location);
-      setSelectedDay(new Date()); // Reset to today when refreshing
-
-      try {
-        const nowcast = await getNowcastData(latitude, longitude);
-        setPrecipitationData(nowcast);
-      } catch (nowcastError) {
-        console.warn('Could not fetch nowcast data:', nowcastError);
-        setPrecipitationData(null);
-      }
-    } catch (err) {
-      console.error('Weather fetch error:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Reset selected day when weather data changes
   useEffect(() => {
-    fetchWeatherData();
-  }, []);
-
-  useEffect(() => {
-    if (onRefresh) {
-      fetchWeatherData();
+    if (weatherData) {
+      setSelectedDay(new Date());
     }
-  }, [onRefresh]);
+  }, [weatherData]);
 
   const getWeatherIcon = (symbolCode) => {
     if (!symbolCode) return null;
@@ -83,7 +48,7 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
       'heavyrainandthunder': '11',
       'sleet': '12',
       'snow': '13',
-      'heavysnow': '14',
+      'snowandthunder': '14',
       'fog': '15',
       'sleetshowersandthunder': '20',
       'snowshowersandthunder': '21',
@@ -189,6 +154,16 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
           </svg>
           <h3>{t('errorTitle')}</h3>
           <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!weatherData) {
+    return (
+      <div className="weather-card">
+        <div className="error-message">
+          <p>{t('noData')}</p>
         </div>
       </div>
     );

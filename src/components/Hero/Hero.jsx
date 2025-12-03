@@ -1,17 +1,93 @@
 // src/components/Hero/Hero.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard';
 import SideMenu from '../SideMenu/SideMenu';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getTranslation } from '../../utils/translations';
+import { getUserLocation } from '../../services/locationService';
+import { getWeatherData } from '../../services/weatherService';
+import { getLocationName } from '../../services/geocodingService';
+import { getNowcastData } from '../../services/nowcastService';
+import { getBackgroundImage } from '../../utils/backgroundImages';
 import './Hero.css';
 
 const Hero = ({ darkMode, setDarkMode }) => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+  const [locationName, setLocationName] = useState('');
+  const [precipitationData, setPrecipitationData] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState('/assets/heroBackgrounds/placeholder.jpg');
   const { language } = useLanguage();
 
   const t = (key) => getTranslation(language, key);
+
+  const fetchWeatherData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const { latitude, longitude } = await getUserLocation();
+
+      const [weather, location] = await Promise.all([
+        getWeatherData(latitude, longitude),
+        getLocationName(latitude, longitude)
+      ]);
+
+      setWeatherData(weather);
+      setLocationName(location);
+
+      // Set background based on temperature and weather
+      const bgImage = getBackgroundImage(
+        weather.temperature,
+        weather.symbolCode,
+        darkMode
+      );
+      setBackgroundImage(bgImage);
+
+      // Fetch nowcast data
+      try {
+        const nowcast = await getNowcastData(latitude, longitude);
+        setPrecipitationData(nowcast);
+      } catch (nowcastError) {
+        console.warn('Could not fetch nowcast data:', nowcastError);
+        setPrecipitationData(null);
+      }
+    } catch (err) {
+      console.error('Weather fetch error:', err);
+      setError(err.message);
+      // Only set placeholder if no current background exists
+      if (!backgroundImage || backgroundImage === '/assets/heroBackgrounds/placeholder.jpg') {
+        setBackgroundImage('/assets/heroBackgrounds/placeholder.jpg');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchWeatherData();
+  }, []);
+
+  useEffect(() => {
+    if (refreshTrigger > 0) {
+      fetchWeatherData();
+    }
+  }, [refreshTrigger]);
+
+  // Update background when dark mode changes
+  useEffect(() => {
+    if (weatherData) {
+      const bgImage = getBackgroundImage(
+        weatherData.temperature,
+        weatherData.symbolCode,
+        darkMode
+      );
+      setBackgroundImage(bgImage);
+    }
+  }, [darkMode, weatherData]);
 
   const handleRefresh = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -28,7 +104,12 @@ const Hero = ({ darkMode, setDarkMode }) => {
   return (
     <div className="hero-container">
       {/* Hero Background */}
-      <div className="hero-background">
+      <div 
+        className="hero-background"
+        style={{
+          backgroundImage: `linear-gradient(var(--color-bg-overlay), var(--color-bg-overlay)), url('${backgroundImage}')`
+        }}
+      >
         
         {/* Navigation Bar */}
         <nav className="navbar">
@@ -48,9 +129,10 @@ const Hero = ({ darkMode, setDarkMode }) => {
                 className="nav-btn" 
                 onClick={handleRefresh}
                 aria-label={t('refresh')}
+                disabled={loading}
               >
                 <svg 
-                  className="icon refresh-icon" 
+                  className={`icon refresh-icon ${loading ? 'spinning' : ''}`}
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -130,8 +212,12 @@ const Hero = ({ darkMode, setDarkMode }) => {
           <div className="glass-card">
             <div className="card-inner">
               <WeatherCard 
-                darkMode={darkMode} 
-                onRefresh={refreshTrigger}
+                darkMode={darkMode}
+                weatherData={weatherData}
+                locationName={locationName}
+                precipitationData={precipitationData}
+                loading={loading}
+                error={error}
               />
             </div>
           </div>

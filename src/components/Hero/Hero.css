@@ -10,12 +10,10 @@
 .hero-background {
   position: relative;
   min-height: 100vh;
-  background-image: 
-    linear-gradient(var(--color-bg-overlay), var(--color-bg-overlay)),
-    url('/assets/heroBackgrounds/placeholder.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  transition: background-image 0.6s ease-in-out;
 }
 
 /* Navbar */
@@ -91,12 +89,17 @@
   justify-content: center;
 }
 
-.nav-btn:hover {
+.nav-btn:hover:not(:disabled) {
   background: var(--color-glass-bg-hover);
 }
 
-.nav-btn:active {
+.nav-btn:active:not(:disabled) {
   transform: scale(0.95);
+}
+
+.nav-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .icon {
@@ -109,8 +112,21 @@
   transition: transform var(--transition-slow);
 }
 
-.nav-btn:hover .refresh-icon {
+.nav-btn:hover:not(:disabled) .refresh-icon:not(.spinning) {
   transform: rotate(180deg);
+}
+
+.refresh-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Hero Content */
