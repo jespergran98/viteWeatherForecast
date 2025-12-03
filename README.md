@@ -184,3 +184,32 @@ nedbør neste 24 timer
 vind neste 24 timer
 
 VærVarsel.no?
+
+---
+
+Current file structure:
+
+```
+viteweatherforecast (root)
+│
+├── node_modules/
+├── public/
+│   └── assets/
+│       └── weatherIcons/
+│           ├── darkmode/
+│           └── lightmode/
+├── src/
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   ├── index.jsx
+│   └── main.jsx
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package.json
+├── package-lock.json
+├── README.md
+├── vite.config.js
+└── viteWeatherForecast - Shortcut.lnk
+```
