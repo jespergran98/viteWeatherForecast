@@ -1,14 +1,29 @@
 // src/components/Hero/Hero.jsx
-import React, { useState } from 'react'
-import WeatherCard from '../WeatherCard/WeatherCard'
-import './Hero.css'
+import React, { useState } from 'react';
+import WeatherCard from '../WeatherCard/WeatherCard';
+import SideMenu from '../SideMenu/SideMenu';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getTranslation } from '../../utils/translations';
+import './Hero.css';
 
 const Hero = ({ darkMode, setDarkMode }) => {
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { language } = useLanguage();
+
+  const t = (key) => getTranslation(language, key);
 
   const handleRefresh = () => {
-    setRefreshTrigger(prev => prev + 1)
-  }
+    setRefreshTrigger(prev => prev + 1);
+  };
+
+  const handleMenuToggle = () => {
+    setMenuOpen(prev => !prev);
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <div className="hero-container">
@@ -21,9 +36,9 @@ const Hero = ({ darkMode, setDarkMode }) => {
             {/* Logo Section */}
             <div className="logo-section">
               <div className="logo-icon">
-                <img src="/assets/logo/logo.png" alt="VærVarsel Logo" />
+                <img src="/assets/logo/logo.png" alt={`${t('appName')} Logo`} />
               </div>
-              <span className="logo-text">VærVarsel</span>
+              <span className="logo-text">{t('appName')}</span>
             </div>
 
             {/* Action Buttons */}
@@ -32,7 +47,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
               <button 
                 className="nav-btn" 
                 onClick={handleRefresh}
-                aria-label="Refresh weather"
+                aria-label={t('refresh')}
               >
                 <svg 
                   className="icon refresh-icon" 
@@ -53,7 +68,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
               <button 
                 className="nav-btn" 
                 onClick={() => setDarkMode(!darkMode)}
-                aria-label="Toggle dark mode"
+                aria-label={t('toggleDarkMode')}
               >
                 {darkMode ? (
                   <svg 
@@ -87,7 +102,11 @@ const Hero = ({ darkMode, setDarkMode }) => {
               </button>
 
               {/* Hamburger Menu */}
-              <button className="nav-btn" aria-label="Menu">
+              <button 
+                className="nav-btn" 
+                onClick={handleMenuToggle}
+                aria-label={t('menu')}
+              >
                 <svg 
                   className="icon" 
                   fill="none" 
@@ -118,8 +137,11 @@ const Hero = ({ darkMode, setDarkMode }) => {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
 
-export default Hero
+      {/* Side Menu */}
+      <SideMenu isOpen={menuOpen} onClose={handleMenuClose} />
+    </div>
+  );
+};
+
+export default Hero;

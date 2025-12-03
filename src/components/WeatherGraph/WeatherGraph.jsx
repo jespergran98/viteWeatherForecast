@@ -1,8 +1,13 @@
 // src/components/WeatherGraph/WeatherGraph.jsx
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getTranslation } from '../../utils/translations';
 import './WeatherGraph.css';
 
 const WeatherGraph = ({ type, data, precipitationData }) => {
+  const { language } = useLanguage();
+  const t = (key) => getTranslation(language, key);
+
   const getChartData = () => {
     if (type === 'precipitation' && precipitationData) {
       return precipitationData.slice(0, 24).map(item => ({
@@ -31,7 +36,7 @@ const WeatherGraph = ({ type, data, precipitationData }) => {
   if (!chartData || chartData.length === 0) {
     return (
       <div className="weather-graph">
-        <p className="no-data">No data available</p>
+        <p className="no-data">{t('noData')}</p>
       </div>
     );
   }

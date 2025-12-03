@@ -1,12 +1,17 @@
 // src/components/TabNavigation/TabNavigation.jsx
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getTranslation } from '../../utils/translations';
 import './TabNavigation.css';
 
 const TabNavigation = ({ activeTab, onTabChange }) => {
+  const { language } = useLanguage();
+  const t = (key) => getTranslation(language, key);
+
   const tabs = [
-    { id: 'temperature', label: 'Temperatur' },
-    { id: 'precipitation', label: 'Nedbør' },
-    { id: 'wind', label: 'Vind' }
+    { id: 'temperature', label: t('temperature') },
+    { id: 'precipitation', label: t('precipitation') },
+    { id: 'wind', label: t('wind') }
   ];
 
   return (

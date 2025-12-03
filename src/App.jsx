@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import Hero from './components/Hero/Hero'
+import React, { useState, useEffect } from 'react';
+import { LanguageProvider } from './contexts/LanguageContext';
+import Hero from './components/Hero/Hero';
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
     // Check localStorage for saved preference
-    const savedTheme = localStorage.getItem('theme')
+    const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
-      return savedTheme === 'dark'
+      return savedTheme === 'dark';
     }
     // Default to system preference
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   // Apply theme class to documentElement (html tag) when darkMode changes
   useEffect(() => {
@@ -24,13 +25,15 @@ function App() {
       root.classList.remove('dark-mode');
       localStorage.setItem('theme', 'light');
     }
-  }, [darkMode])
+  }, [darkMode]);
 
   return (
-    <div className="app">
-      <Hero darkMode={darkMode} setDarkMode={setDarkMode} />
-    </div>
-  )
+    <LanguageProvider>
+      <div className="app">
+        <Hero darkMode={darkMode} setDarkMode={setDarkMode} />
+      </div>
+    </LanguageProvider>
+  );
 }
 
-export default App
+export default App;

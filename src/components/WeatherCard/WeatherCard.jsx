@@ -4,8 +4,11 @@ import { getUserLocation } from '../../services/locationService';
 import { getWeatherData, celsiusToFahrenheit } from '../../services/weatherService';
 import { getLocationName } from '../../services/geocodingService';
 import { getNowcastData } from '../../services/nowcastService';
-import TabNavigation from '../tabNavigation/tabNavigation';
-import WeatherGraph from '../weatherGraph/weatherGraph';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { getTranslation } from '../../utils/translations';
+import { getWeatherDescription } from '../../utils/weatherDescriptions';
+import TabNavigation from '../TabNavigation/TabNavigation';
+import WeatherGraph from '../WeatherGraph/WeatherGraph';
 import './WeatherCard.css';
 
 const WeatherCard = ({ darkMode, onRefresh }) => {
@@ -16,6 +19,9 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
   const [precipitationData, setPrecipitationData] = useState(null);
   const [isFahrenheit, setIsFahrenheit] = useState(false);
   const [activeTab, setActiveTab] = useState('temperature');
+  const { language } = useLanguage();
+
+  const t = (key) => getTranslation(language, key);
 
   const fetchWeatherData = async () => {
     try {
@@ -114,7 +120,7 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
               strokeWidth="5"
             />
           </svg>
-          <p>Loading weather...</p>
+          <p>{t('loading')}</p>
         </div>
       </div>
     );
@@ -128,12 +134,14 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h3>Unable to load weather</h3>
+          <h3>{t('errorTitle')}</h3>
           <p>{error}</p>
         </div>
       </div>
     );
   }
+
+  const weatherDescription = getWeatherDescription(weatherData.symbolCode, language);
 
   return (
     <div className="weather-card">
@@ -170,28 +178,46 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
                     className={`unit-button ${!isFahrenheit ? 'active' : ''}`}
                     onClick={() => setIsFahrenheit(false)}
                   >
-                    °C
+                    {t('celsius')}
                   </button>
                   <span className="unit-divider">|</span>
                   <button
                     className={`unit-button ${isFahrenheit ? 'active' : ''}`}
                     onClick={() => setIsFahrenheit(true)}
                   >
-                    °F
+                    {t('fahrenheit')}
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Weather Description */}
+          {weatherDescription && (
+            <div className="weather-description">
+              <p className="description-text">{weatherDescription}</p>
+            </div>
+          )}
+
           {/* Weather Details */}
           <div className="weather-details">
+            {/* Feels Like - Only show if available */}
+            {weatherData.feelsLike !== undefined && (
+              <div className="detail-item">
+                <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>{t('feelsLike')}: {displayTemperature(weatherData.feelsLike)}°</span>
+              </div>
+            )}
+
             <div className="detail-item">
               <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
               </svg>
-              <span>{Math.round(weatherData.humidity)}%</span>
+              <span>{t('humidity')}: {Math.round(weatherData.humidity)}{t('percent')}</span>
             </div>
 
             <div className="detail-item">
@@ -199,7 +225,7 @@ const WeatherCard = ({ darkMode, onRefresh }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-              <span>{Math.round(weatherData.windSpeed)} m/s</span>
+              <span>{t('windSpeed')}: {Math.round(weatherData.windSpeed)} {t('metersPerSecond')}</span>
             </div>
           </div>
         </div>

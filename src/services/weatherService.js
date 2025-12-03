@@ -69,7 +69,8 @@ const parseWeatherData = (data) => {
     };
   });
 
-  return {
+  // Build the weather object
+  const weatherData = {
     temperature: instant.air_temperature,
     symbolCode: symbolCode,
     humidity: instant.relative_humidity,
@@ -80,6 +81,18 @@ const parseWeatherData = (data) => {
     updatedAt: new Date(current.time),
     forecast24h: forecast24h
   };
+
+  // Add feels like temperature if available in the API
+  // The MET API may include percentile temperatures which can be used as "feels like"
+  if (instant.air_temperature_percentile_10 !== undefined) {
+    weatherData.feelsLike = instant.air_temperature_percentile_10;
+  } else if (instant.air_temperature_percentile_90 !== undefined) {
+    weatherData.feelsLike = instant.air_temperature_percentile_90;
+  }
+  // Note: The MET API doesn't typically include a direct "feels like" value
+  // If these percentiles aren't available, we simply don't include feels like
+
+  return weatherData;
 };
 
 /**
