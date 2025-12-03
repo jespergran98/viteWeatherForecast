@@ -291,23 +291,36 @@ export const weatherDescriptions = {
 
 /**
  * Gets the weather description for a given symbol code and language
- * @param {string} symbolCode - The weather symbol code (e.g., 'clearsky_day')
+ * @param {string} symbolCode - The weather symbol code (e.g., 'clearsky_day' or 'clearsky')
  * @param {string} language - Language code ('no', 'nn', 'en')
  * @returns {string} The weather description
  */
 export const getWeatherDescription = (symbolCode, language = 'no') => {
   if (!symbolCode) return '';
   
-  // Remove the time variant (day/night/polartwilight) from the symbol code
-  const parts = symbolCode.split('_');
-  const weatherType = parts.slice(0, -1).join('_');
+  // Handle symbol codes with or without time variant suffix
+  let weatherType = symbolCode;
   
+  // If symbol code contains underscore, remove the time variant suffix
+  if (symbolCode.includes('_')) {
+    const parts = symbolCode.split('_');
+    const lastPart = parts[parts.length - 1];
+    
+    // Only remove last part if it's a known time variant
+    const timeVariants = ['day', 'night', 'polartwilight'];
+    if (timeVariants.includes(lastPart)) {
+      weatherType = parts.slice(0, -1).join('_');
+    }
+  }
+  
+  // Get description from the weatherDescriptions object
   const description = weatherDescriptions[weatherType];
   
   if (description) {
+    // Return description in requested language, fallback to Norwegian
     return description[language] || description['no'];
   }
   
-  // Fallback for unknown weather types
-  return symbolCode;
+  // If no description found, return the weather type with proper casing
+  return weatherType.charAt(0).toUpperCase() + weatherType.slice(1).replace(/_/g, ' ');
 };

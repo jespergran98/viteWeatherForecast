@@ -11,11 +11,23 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
   const getChartData = () => {
     if (!hourlyData || hourlyData.length === 0) return [];
 
-    // Filter hourly data for the selected day (24 hours)
+    const now = new Date();
     const selectedDateString = selectedDay.toDateString();
-    const dayData = hourlyData.filter(item => 
-      item.date === selectedDateString
-    ).slice(0, 24);
+    const todayString = now.toDateString();
+    const isToday = selectedDateString === todayString;
+
+    let dayData = [];
+
+    if (isToday) {
+      // For today, get the next 24 hours starting from current hour
+      const currentHour = now.getHours();
+      dayData = hourlyData.slice(0, 24);
+    } else {
+      // For future days, filter by the selected date
+      dayData = hourlyData.filter(item => 
+        item.date === selectedDateString
+      ).slice(0, 24);
+    }
 
     if (type === 'precipitation') {
       // Merge nowcast data (first 2 hours) with hourly forecast data
@@ -23,9 +35,6 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
       const twoHoursFromNow = new Date(currentTime.getTime() + 2 * 60 * 60 * 1000);
       
       let mergedData = [];
-
-      // Check if selected day is today
-      const isToday = selectedDateString === currentTime.toDateString();
 
       if (isToday && precipitationData && precipitationData.length > 0) {
         // Use nowcast data for the first 2 hours

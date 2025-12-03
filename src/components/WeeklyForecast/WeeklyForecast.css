@@ -8,45 +8,24 @@
 }
 
 .forecast-scroll {
-  display: flex;
-  gap: var(--spacing-md);
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: var(--spacing-md) 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-glass-border) transparent;
-}
-
-.forecast-scroll::-webkit-scrollbar {
-  height: 6px;
-}
-
-.forecast-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.forecast-scroll::-webkit-scrollbar-thumb {
-  background-color: var(--color-glass-border);
-  border-radius: var(--radius-sm);
-}
-
-.forecast-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-glass-border-strong);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: var(--spacing-sm);
+  width: 100%;
 }
 
 .day-card {
-  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-2xl) var(--spacing-xl);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl) var(--spacing-sm);
   background: var(--color-glass-bg);
   border: 1px solid var(--color-glass-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
-  min-width: 80px;
+  width: 100%;
 }
 
 .day-card:hover {
@@ -65,11 +44,12 @@
 }
 
 .day-label {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
   text-transform: capitalize;
   white-space: nowrap;
+  text-align: center;
 }
 
 .day-card.selected .day-label {
@@ -78,8 +58,8 @@
 }
 
 .day-icon-wrapper {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +76,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
 }
 
@@ -108,6 +88,32 @@
   color: var(--color-text-tertiary);
 }
 
+/* Responsive Design - Small devices */
+@media (min-width: 480px) {
+  .forecast-scroll {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .day-card {
+    padding: var(--spacing-2xl) var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+
+  .day-label {
+    font-size: var(--font-size-sm);
+  }
+
+  .day-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .day-temps {
+    font-size: var(--font-size-base);
+  }
+}
+
 /* Responsive Design - Tablet and Up */
 @media (min-width: 768px) {
   .weekly-forecast {
@@ -116,12 +122,12 @@
   }
 
   .forecast-scroll {
-    gap: var(--spacing-lg);
+    grid-template-columns: repeat(8, 1fr);
+    gap: var(--spacing-md);
   }
 
   .day-card {
-    min-width: 90px;
-    padding: var(--spacing-3xl) var(--spacing-2xl);
+    padding: var(--spacing-2xl) var(--spacing-lg);
   }
 
   .day-label {
@@ -129,8 +135,8 @@
   }
 
   .day-icon-wrapper {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
   }
 
   .day-temps {
@@ -141,16 +147,16 @@
 /* Responsive Design - Desktop */
 @media (min-width: 1024px) {
   .forecast-scroll {
-    gap: var(--spacing-xl);
+    gap: var(--spacing-lg);
   }
 
   .day-card {
-    min-width: 100px;
+    padding: var(--spacing-3xl) var(--spacing-xl);
   }
 
   .day-icon-wrapper {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
   }
 
   .day-temps {
