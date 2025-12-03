@@ -100,7 +100,7 @@ The built files will be in the `dist` directory.
 npm run preview
 ```
 
-## New Features
+## Features
 
 ### Weekly Forecast Component
 
@@ -155,10 +155,6 @@ The app uses a comprehensive design token system with CSS custom properties:
 - **Effects**: Border radius, shadows, backdrop blur
 - **Transitions**: Consistent animation timing
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
 This project is open source and available under the MIT License.
@@ -183,14 +179,6 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-
 ---
 
 App idea:
@@ -206,7 +194,7 @@ App idea:
 - Rød/gul/oransje varselbanner når det er aktive farevarsler
 - Pull-to-refresh på mobil ("Slipp for å oppdatere")
 
-## Endelig filstruktur (med kommentarer)
+## Endelig filstruktur før prosjektstart (med kommentarer)
 
 ```bash
 src/
@@ -244,7 +232,7 @@ Nowcast API:
 https://api.met.no/weatherapi/nowcast/2.0/documentation
 
 
-## Clean file structure:
+## Clean file structure concept:
 
 ```bash
 src/
@@ -269,7 +257,7 @@ src/
 
 ---
 
-### Valgte NPM-pakker i prosjektet (alle er frivillige oppgaveforslag – ingen er påkrevd, men må minst bruke en)
+### Vurderte NPM-pakker i prosjektet (alle er frivillige oppgaveforslag – ingen er påkrevd, men må minst bruke en)
 
 | Pakke                          | Begrunnelse og nytte i Vær-appen                                                                      |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------- |
@@ -292,7 +280,7 @@ src/
 - Global `useLocationsStore` (Zustand + persist) → erstattet hele `utils/storage.js` og ryddet enormt opp i App.jsx
 - `<AnimatePresence>` fra Framer Motion rundt kortene → magisk flyt når steder legges til eller fjernes
 
-### Endelig package.json
+### Endelig package.json forslag før prosjektstart:
 
 ```json
 {
@@ -347,7 +335,7 @@ Hero:
 bakgrunn endres basert på hva slags vær det er, på midten av heroen er en glassplate som viser været i brukeren's posisjon.
 helt på toppen av heroen over glassplaten er en logo og navn på venstre side, og en hamburger knapp på høyre side.
 
-glassplaten:
+glassplate:
 
 venstre kolonne:
 top til venstre:
@@ -373,7 +361,17 @@ viteweatherforecast/
 ├── public/
 │   └── assets/
 │       ├── heroBackgrounds/
-│       │   └── placeholder.jpg
+│       │    ├── minus/
+│       │    │   ├── 01d.webp
+│       │    │   ├── 01n.webp
+│       │    │   ├── 01m.webp
+│       │    │   └── ... (all other background images)
+│       │    ├── plus/
+│       │    │   ├── 01d.webp
+│       │    │   ├── 01n.webp
+│       │    │   ├── 01m.webp
+│       │    │   └── ... (all other background images)
+│       │    └── placeholder.jpg
 │       ├── logo/
 │       │   └── logo.png
 │       └── weatherIcons/
@@ -387,29 +385,46 @@ viteweatherforecast/
 │               ├── 01n.svg
 │               ├── 01m.svg
 │               └── ... (all other icon files)
-src/
-├── components/
-│   ├── Hero/
-│   │   ├── Hero.jsx
-│   │   └── Hero.css
-│   ├── WeatherCard/
-│   │   ├── WeatherCard.jsx
-│   │   └── WeatherCard.css 
-│   ├── TabNavigation
-│   │   ├── TabNavigation.jsx
-│   │   └── TabNavigation.css
-│   └── WeatherGraph
-│       ├── WeatherGraph.jsx
-│       └── WeatherGraph.css
-├── services/
-│   ├── locationService.js
-│   ├── weatherService.js
-│   ├── geocodingService.js
-│   └── nowcastService.js
+├── src/
+│   ├── components/
+│   │   ├── Hero/
+│   │   │   ├── Hero.jsx
+│   │   │   └── Hero.css
+│   │   ├── SideMenu/
+│   │   │   ├── SideMenu.jsx
+│   │   │   └── SideMenu.css
+│   │   ├── TabNavigation/
+│   │   │   ├── TabNavigation.jsx
+│   │   │   └── TabNavigation.css
+│   │   ├──  WeatherCard/
+│   │   │   ├── WeatherCard.jsx
+│   │   │   └── WeatherCard.css
+│   │   └── WeatherGraph/
+│   │       ├── WeatherGraph.jsx
+│   │       └── WeatherGraph.css
+│   │   └── WeeklyForecast/
+│   │       ├── WeeklyForecast.jsx
+│   │       └── WeeklyForecast.css
+│   ├── contexts/
+│   │   └──  LanguageContext.jsx
+│   ├── services/
+│   │   ├── locationService.js
+│   │   ├── weatherService.js
+│   │   ├── nowastService.js
+│   │   └── geocodingService.js
+│   ├── utils/
+│   │   ├── backgroundImages.js
+│   │   ├── translation.js
+│   │   └── weatherDescriptions.js
 │   ├── App.jsx
 │   ├── App.css
 │   └── main.jsx
+├── .gitignore
+├── eslint.config.js
 ├── index.html
 ├── package.json
-└── vite.config.js
+├── package-lock.json
+├── README.md
+├── vite.config.js
+└── viteWeatherForecast
 ```
