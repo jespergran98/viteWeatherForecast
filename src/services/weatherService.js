@@ -7,7 +7,6 @@
  * @returns {Promise<Object>} Weather data object
  */
 export const getWeatherData = async (latitude, longitude) => {
-  // Round coordinates to 4 decimal places as required by MET API
   const lat = parseFloat(latitude.toFixed(4));
   const lon = parseFloat(longitude.toFixed(4));
 
@@ -33,27 +32,42 @@ export const getWeatherData = async (latitude, longitude) => {
 };
 
 /**
- * Parses the MET Norway API response to extract current weather information
+ * Parses the MET Norway API response to extract current weather and forecast
  * @param {Object} data - Raw API response
- * @returns {Object} Parsed weather data
+ * @returns {Object} Parsed weather data with current conditions and 24h forecast
  */
 const parseWeatherData = (data) => {
   if (!data.properties || !data.properties.timeseries || data.properties.timeseries.length === 0) {
     throw new Error('Invalid weather data format');
   }
 
-  // Get the first timeseries entry (current weather)
-  const current = data.properties.timeseries[0];
+  const timeseries = data.properties.timeseries;
+  
+  // Get current weather (first entry)
+  const current = timeseries[0];
   const instant = current.data.instant.details;
   
-  // Get weather symbol from next_1_hours, next_6_hours, or next_12_hours
   const next1h = current.data.next_1_hours;
   const next6h = current.data.next_6_hours;
   const next12h = current.data.next_12_hours;
 
-  // Prefer shorter time intervals for more accurate current conditions
   const symbolData = next1h || next6h || next12h;
   const symbolCode = symbolData?.summary?.symbol_code || 'clearsky_day';
+
+  // Parse 24-hour forecast data
+  const forecast24h = timeseries.slice(0, 25).map(entry => {
+    const time = new Date(entry.time);
+    const details = entry.data.instant.details;
+    const precipitation = entry.data.next_1_hours?.details?.precipitation_amount || 0;
+
+    return {
+      time: time,
+      temperature: details.air_temperature,
+      windSpeed: details.wind_speed,
+      precipitation: precipitation,
+      hour: time.getHours()
+    };
+  });
 
   return {
     temperature: instant.air_temperature,
@@ -63,16 +77,25 @@ const parseWeatherData = (data) => {
     windDirection: instant.wind_from_direction,
     pressure: instant.air_pressure_at_sea_level,
     cloudiness: instant.cloud_area_fraction,
-    updatedAt: new Date(current.time)
+    updatedAt: new Date(current.time),
+    forecast24h: forecast24h
   };
 };
 
 /**
  * Determines if it's currently daytime based on time of day
- * Simple heuristic: 6 AM to 8 PM is day, otherwise night
  * @returns {boolean} true if daytime, false if nighttime
  */
 export const isDaytime = () => {
   const hour = new Date().getHours();
   return hour >= 6 && hour < 20;
+};
+
+/**
+ * Converts Celsius to Fahrenheit
+ * @param {number} celsius 
+ * @returns {number} Temperature in Fahrenheit
+ */
+export const celsiusToFahrenheit = (celsius) => {
+  return (celsius * 9/5) + 32;
 };

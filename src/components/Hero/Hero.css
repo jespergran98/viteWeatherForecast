@@ -139,8 +139,8 @@
   border-radius: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  padding: 3rem 2rem;
-  min-height: 25rem;
+  padding: 2rem 1.5rem;
+  min-height: 28rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,12 +166,12 @@
   }
   
   .card-inner {
-    padding: 3rem;
-    min-height: 31.25rem;
+    padding: 2.5rem 2rem;
+    min-height: 30rem;
   }
   
   .glass-card {
-    max-width: 40rem;
+    max-width: 42rem;
   }
 }
 
@@ -182,10 +182,21 @@
   }
   
   .glass-card {
-    max-width: 48rem;
+    max-width: 56rem;
   }
   
   .card-inner {
-    padding: 4rem;
+    padding: 3rem 2.5rem;
+    min-height: 32rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .glass-card {
+    max-width: 64rem;
+  }
+  
+  .card-inner {
+    padding: 3.5rem 3rem;
   }
 }

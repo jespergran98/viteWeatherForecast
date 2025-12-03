@@ -64,6 +64,9 @@ Nominatim (OpenStreetMap) → stedsøk (gratis, ingen nøkkel)
 https://nominatim.openstreetmap.org/search?q=Oslo&format=json
 Værikoner → lastet ned fra https://github.com/metno/weathericons
 https://nrkno.github.io/yr-weather-symbols/
+Nowcast API:
+https://api.met.no/weatherapi/nowcast/2.0/documentation
+
 
 ## Clean file structure:
 
@@ -208,18 +211,25 @@ viteweatherforecast/
 │               ├── 01n.svg
 │               ├── 01m.svg
 │               └── ... (all other icon files)
-├── src/
-│   ├── components/
-│   │   ├── Hero/
-│   │   │   ├── Hero.jsx
-│   │   │   └── Hero.css
-│   │   └── WeatherCard/
-│   │       ├── WeatherCard.jsx
-│   │       └── WeatherCard.css
-│   ├── services/
-│   │   ├── locationService.js
-│   │   ├── weatherService.js
-│   │   └── geocodingService.js
+src/
+├── components/
+│   ├── Hero/
+│   │   ├── Hero.jsx
+│   │   └── Hero.css
+│   ├── WeatherCard/
+│   │   ├── WeatherCard.jsx
+│   │   └── WeatherCard.css 
+│   ├── TabNavigation
+│   │   ├── TabNavigation.jsx
+│   │   └── TabNavigation.css
+│   └── WeatherGraph
+│       ├── WeatherGraph.jsx
+│       └── WeatherGraph.css
+├── services/
+│   ├── locationService.js
+│   ├── weatherService.js
+│   ├── geocodingService.js
+│   └── nowcastService.js
 │   ├── App.jsx
 │   ├── App.css
 │   └── main.jsx
