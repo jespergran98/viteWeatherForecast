@@ -69,17 +69,20 @@ viteweatherforecast/
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd viteweatherforecast
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -143,6 +146,7 @@ This app uses free, public APIs from the Norwegian Meteorological Institute:
 ## Permissions
 
 The app requires:
+
 - **Location Access**: To fetch weather data for your current location
 
 ## Design System
@@ -168,7 +172,6 @@ This project is open source and available under the MIT License.
 ## Contact
 
 For questions or feedback, please open an issue on GitHub.
-
 
 # React + Vite
 
@@ -230,7 +233,6 @@ Værikoner → lastet ned fra https://github.com/metno/weathericons
 https://nrkno.github.io/yr-weather-symbols/
 Nowcast API:
 https://api.met.no/weatherapi/nowcast/2.0/documentation
-
 
 ## Clean file structure concept:
 
@@ -422,6 +424,7 @@ viteweatherforecast/
 ├── .gitignore
 ├── eslint.config.js
 ├── index.html
+├── nextconfig.ts
 ├── package.json
 ├── package-lock.json
 ├── README.md

@@ -114,24 +114,21 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
   }
 
   const getColor = () => {
-    const root = document.documentElement;
-    const computedStyle = getComputedStyle(root);
-    
     switch(type) {
       case 'temperature': 
         return { 
-          fill: computedStyle.getPropertyValue('--color-graph-temperature-fill').trim() || 'rgba(255, 193, 7, 0.3)', 
-          stroke: computedStyle.getPropertyValue('--color-graph-temperature-stroke').trim() || 'rgba(255, 193, 7, 1)' 
+          fill: 'var(--color-graph-temperature-fill)', 
+          stroke: 'var(--color-graph-temperature-stroke)' 
         };
       case 'precipitation': 
         return { 
-          fill: computedStyle.getPropertyValue('--color-graph-precipitation-fill').trim() || 'rgba(33, 150, 243, 0.3)', 
-          stroke: computedStyle.getPropertyValue('--color-graph-precipitation-stroke').trim() || 'rgba(33, 150, 243, 1)' 
+          fill: 'var(--color-graph-precipitation-fill)', 
+          stroke: 'var(--color-graph-precipitation-stroke)' 
         };
       case 'wind': 
         return { 
-          fill: computedStyle.getPropertyValue('--color-graph-wind-fill').trim() || 'rgba(156, 39, 176, 0.3)', 
-          stroke: computedStyle.getPropertyValue('--color-graph-wind-stroke').trim() || 'rgba(156, 39, 176, 1)' 
+          fill: 'var(--color-graph-wind-fill)', 
+          stroke: 'var(--color-graph-wind-stroke)' 
         };
       default: 
         return { 
@@ -226,7 +223,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
                     y={point.y - 8}
                     textAnchor="middle"
                     className="point-value"
-                    fill="white"
+                    fill="var(--color-text-primary)"
                   >
                     {Math.round(point.value * 10) / 10}
                   </text>
@@ -235,7 +232,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
                     y={height - padding.bottom + 20}
                     textAnchor="middle"
                     className="point-label"
-                    fill="rgba(255, 255, 255, 0.7)"
+                    fill="var(--color-text-tertiary)"
                   >
                     {point.label}
                   </text>
