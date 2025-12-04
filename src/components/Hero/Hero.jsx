@@ -1,5 +1,5 @@
 // src/components/Hero/Hero.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard';
 import SideMenu from '../SideMenu/SideMenu';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -25,7 +25,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
 
   const t = (key) => getTranslation(language, key);
 
-  const fetchWeatherData = async () => {
+  const fetchWeatherData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -69,27 +69,10 @@ const Hero = ({ darkMode, setDarkMode }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchWeatherData();
-  }, []);
-
-  useEffect(() => {
-    if (refreshTrigger > 0) {
-      fetchWeatherData();
-    }
-  }, [refreshTrigger]);
-
-  // Update background when dark mode changes OR selected day changes
-  useEffect(() => {
-    if (weatherData) {
-      updateBackgroundForSelectedDay();
-    }
-  }, [darkMode, weatherData, selectedDay]);
+  }, [darkMode, backgroundImage]);
 
   // Function to update background based on selected day
-  const updateBackgroundForSelectedDay = () => {
+  const updateBackgroundForSelectedDay = useCallback(() => {
     if (!weatherData) return;
 
     const today = new Date();
@@ -127,7 +110,24 @@ const Hero = ({ darkMode, setDarkMode }) => {
         setBackgroundImage(bgImage);
       }
     }
-  };
+  }, [weatherData, selectedDay, darkMode]);
+
+  useEffect(() => {
+    fetchWeatherData();
+  }, [fetchWeatherData]);
+
+  useEffect(() => {
+    if (refreshTrigger > 0) {
+      fetchWeatherData();
+    }
+  }, [refreshTrigger, fetchWeatherData]);
+
+  // Update background when dark mode changes OR selected day changes
+  useEffect(() => {
+    if (weatherData) {
+      updateBackgroundForSelectedDay();
+    }
+  }, [darkMode, weatherData, selectedDay, updateBackgroundForSelectedDay]);
 
   const handleRefresh = () => {
     setRefreshTrigger(prev => prev + 1);
