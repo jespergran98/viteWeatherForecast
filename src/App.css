@@ -155,7 +155,7 @@
   --color-graph-temperature-fill: rgba(255, 193, 7, 0.25);
   --color-graph-temperature-stroke: rgba(255, 193, 7, 1);
   --color-graph-precipitation-fill: rgba(100, 181, 246, 0.25);
-  --color-graph-precipitation-stroke: rgba(100, 181, 246, 1);
+  --color-graph-precipitation-stroke: rgb(0, 184, 241, 1);
   --color-graph-wind-fill: rgba(186, 104, 200, 0.25);
   --color-graph-wind-stroke: rgba(186, 104, 200, 1);
   
@@ -189,7 +189,7 @@
     --color-graph-temperature-fill: rgba(255, 193, 7, 0.25);
     --color-graph-temperature-stroke: rgba(255, 193, 7, 1);
     --color-graph-precipitation-fill: rgba(100, 181, 246, 0.25);
-    --color-graph-precipitation-stroke: rgba(100, 181, 246, 1);
+    --color-graph-precipitation-stroke: rgb(0, 184, 241, 1);
     --color-graph-wind-fill: rgba(186, 104, 200, 0.25);
     --color-graph-wind-stroke: rgba(186, 104, 200, 1);
     --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
