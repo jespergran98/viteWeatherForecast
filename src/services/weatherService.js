@@ -61,7 +61,7 @@ const parseWeatherData = (data) => {
   const instant = current.data.instant.details;
   const symbolData = current.data.next_1_hours || current.data.next_6_hours || current.data.next_12_hours;
 
-  // Parse hourly forecast
+  // Parse hourly forecast - UPDATED to include humidity and windSpeed
   const hourlyForecast = timeseries.map(entry => {
     const time = new Date(entry.time);
     const details = entry.data.instant.details;
@@ -71,6 +71,7 @@ const parseWeatherData = (data) => {
       time,
       temperature: details.air_temperature,
       windSpeed: details.wind_speed,
+      humidity: details.relative_humidity, // Added humidity to hourly data
       precipitation: entry.data.next_1_hours?.details?.precipitation_amount || 0,
       symbolCode: hourSymbolData?.summary?.symbol_code || 'clearsky_day',
       hour: time.getHours(),

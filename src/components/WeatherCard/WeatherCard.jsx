@@ -1,5 +1,5 @@
 // src/components/WeatherCard/WeatherCard.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { celsiusToFahrenheit } from '../../services/weatherService';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getTranslation } from '../../utils/translations';
@@ -19,17 +19,10 @@ const WeatherCard = ({
 }) => {
   const [isFahrenheit, setIsFahrenheit] = useState(false);
   const [activeTab, setActiveTab] = useState('temperature');
-  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(() => new Date());
   const { language } = useLanguage();
 
   const t = (key) => getTranslation(language, key);
-
-  // Reset selected day when weather data changes
-  useEffect(() => {
-    if (weatherData) {
-      setSelectedDay(new Date());
-    }
-  }, [weatherData]);
 
   const getWeatherIcon = (symbolCode) => {
     if (!symbolCode) return null;
@@ -124,6 +117,94 @@ const WeatherCard = ({
     setSelectedDay(date);
   };
 
+  // Get day label (Today, Tomorrow, or day name)
+  const getDayLabel = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    
+    const diffTime = compareDate - today;
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return t('today');
+    if (diffDays === 1) return t('tomorrow');
+    
+    const fullDays = t('fullDays');
+    return fullDays[compareDate.getDay()];
+  };
+
+  // Check if selected day is today
+  const isToday = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+    
+    return today.getTime() === compareDate.getTime();
+  };
+
+  // Get data for selected day
+  const getSelectedDayData = () => {
+    if (!weatherData || !weatherData.dailyForecast) return null;
+    
+    // If today is selected, use current weather data
+    if (isToday(selectedDay)) {
+      return {
+        temperature: weatherData.temperature,
+        symbolCode: weatherData.symbolCode,
+        humidity: weatherData.humidity,
+        windSpeed: weatherData.windSpeed,
+        feelsLike: weatherData.feelsLike
+      };
+    }
+    
+    // Otherwise, find the matching day in dailyForecast
+    const selectedDayData = weatherData.dailyForecast.find(day => {
+      const dayDate = new Date(day.date);
+      dayDate.setHours(0, 0, 0, 0);
+      const selDate = new Date(selectedDay);
+      selDate.setHours(0, 0, 0, 0);
+      return dayDate.getTime() === selDate.getTime();
+    });
+    
+    if (!selectedDayData) return null;
+    
+    // For future days, calculate average values from hourly forecast
+    const dayHourlyData = weatherData.hourlyForecast.filter(hour => {
+      const hourDate = new Date(hour.time);
+      hourDate.setHours(0, 0, 0, 0);
+      const selDate = new Date(selectedDay);
+      selDate.setHours(0, 0, 0, 0);
+      return hourDate.getTime() === selDate.getTime();
+    });
+    
+    if (dayHourlyData.length === 0) {
+      // Fallback to daily averages
+      return {
+        temperature: (selectedDayData.maxTemp + selectedDayData.minTemp) / 2,
+        symbolCode: selectedDayData.symbolCode,
+        humidity: 50, // Default if not available
+        windSpeed: 0, // Default if not available
+        feelsLike: null
+      };
+    }
+    
+    // Calculate averages from hourly data
+    const avgHumidity = dayHourlyData.reduce((sum, h) => sum + (h.humidity || 50), 0) / dayHourlyData.length;
+    const avgWindSpeed = dayHourlyData.reduce((sum, h) => sum + (h.windSpeed || 0), 0) / dayHourlyData.length;
+    
+    return {
+      temperature: (selectedDayData.maxTemp + selectedDayData.minTemp) / 2,
+      symbolCode: selectedDayData.symbolCode,
+      humidity: avgHumidity,
+      windSpeed: avgWindSpeed,
+      feelsLike: null
+    };
+  };
+
   if (loading) {
     return (
       <div className="weather-card">
@@ -169,14 +250,26 @@ const WeatherCard = ({
     );
   }
 
-  const weatherDescription = getWeatherDescription(weatherData.symbolCode, language);
+  const selectedDayData = getSelectedDayData();
+  if (!selectedDayData) {
+    return (
+      <div className="weather-card">
+        <div className="error-message">
+          <p>{t('noData')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const weatherDescription = getWeatherDescription(selectedDayData.symbolCode, language);
+  const dayLabel = getDayLabel(selectedDay);
 
   return (
     <div className="weather-card">
       <div className="card-layout">
         {/* Left Section - Main Info */}
         <div className="card-left">
-          {/* Location Header */}
+          {/* Location Header with Day Label */}
           <div className="location-header">
             <svg className="location-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -184,13 +277,16 @@ const WeatherCard = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <h2 className="location-name">{locationName}</h2>
+            <div className="location-info">
+              <h2 className="location-name">{locationName}</h2>
+              <span className="day-label-text">{dayLabel}</span>
+            </div>
           </div>
 
           {/* Weather Icon and Temperature */}
           <div className="weather-main">
             <img
-              src={getWeatherIcon(weatherData.symbolCode)}
+              src={getWeatherIcon(selectedDayData.symbolCode)}
               alt="Weather icon"
               className="weather-icon"
               onError={(e) => {
@@ -200,7 +296,7 @@ const WeatherCard = ({
             
             <div className="temp-section">
               <div className="temperature-display">
-                <span className="temp-value">{displayTemperature(weatherData.temperature)}</span>
+                <span className="temp-value">{displayTemperature(selectedDayData.temperature)}</span>
                 <div className="temp-units">
                   <button
                     className={`unit-button ${!isFahrenheit ? 'active' : ''}`}
@@ -229,13 +325,13 @@ const WeatherCard = ({
 
           {/* Weather Details */}
           <div className="weather-details">
-            {weatherData.feelsLike !== undefined && (
+            {selectedDayData.feelsLike !== undefined && selectedDayData.feelsLike !== null && (
               <div className="detail-item">
                 <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                     d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span>{t('feelsLike')}: {displayTemperature(weatherData.feelsLike)}°</span>
+                <span>{t('feelsLike')}: {displayTemperature(selectedDayData.feelsLike)}°</span>
               </div>
             )}
 
@@ -244,7 +340,7 @@ const WeatherCard = ({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
               </svg>
-              <span>{t('humidity')}: {Math.round(weatherData.humidity)}{t('percent')}</span>
+              <span>{t('humidity')}: {Math.round(selectedDayData.humidity)}{t('percent')}</span>
             </div>
 
             <div className="detail-item">
@@ -252,7 +348,7 @@ const WeatherCard = ({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-              <span>{t('windSpeed')}: {Math.round(weatherData.windSpeed)} {t('metersPerSecond')}</span>
+              <span>{t('windSpeed')}: {Math.round(selectedDayData.windSpeed)} {t('metersPerSecond')}</span>
             </div>
           </div>
         </div>

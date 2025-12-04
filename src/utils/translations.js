@@ -31,9 +31,12 @@ export const translations = {
     nynorsk: 'Nynorsk',
     english: 'Engelsk',
     
-    // Days of week (abbreviated)
+    // Days of week (abbreviated for weekly forecast)
     days: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
+    // Full day names (for selected day display)
+    fullDays: ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'],
     today: 'I dag',
+    tomorrow: 'I morgen',
     
     // Units
     celsius: '°C',
@@ -73,9 +76,12 @@ export const translations = {
     nynorsk: 'Nynorsk',
     english: 'Engelsk',
     
-    // Days of week (abbreviated)
+    // Days of week (abbreviated for weekly forecast)
     days: ['Søn', 'Mån', 'Tys', 'Ons', 'Tor', 'Fre', 'Lau'],
+    // Full day names (for selected day display)
+    fullDays: ['Søndag', 'Måndag', 'Tysdag', 'Onsdag', 'Torsdag', 'Fredag', 'Laurdag'],
     today: 'I dag',
+    tomorrow: 'I morgon',
     
     // Units
     celsius: '°C',
@@ -115,9 +121,12 @@ export const translations = {
     nynorsk: 'Nynorsk',
     english: 'English',
     
-    // Days of week (abbreviated)
+    // Days of week (abbreviated for weekly forecast)
     days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    // Full day names (for selected day display)
+    fullDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     today: 'Today',
+    tomorrow: 'Tomorrow',
     
     // Units
     celsius: '°C',

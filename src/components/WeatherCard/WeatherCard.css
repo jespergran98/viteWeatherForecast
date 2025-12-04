@@ -28,7 +28,7 @@
 /* Location Header */
 .location-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-md);
 }
 
@@ -36,6 +36,14 @@
   width: var(--icon-size-md);
   height: var(--icon-size-md);
   color: var(--color-text-icon);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.location-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
 .location-name {
@@ -43,6 +51,12 @@
   font-weight: var(--font-weight-semibold);
   margin: 0;
   color: var(--color-text-primary);
+}
+
+.day-label-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-regular);
 }
 
 /* Weather Main */
@@ -279,6 +293,10 @@
     font-size: var(--font-size-xl);
   }
 
+  .day-label-text {
+    font-size: var(--font-size-base);
+  }
+
   .weather-icon {
     width: var(--weather-icon-md);
     height: var(--weather-icon-md);
@@ -305,6 +323,10 @@
 
   .location-name {
     font-size: var(--font-size-2xl);
+  }
+
+  .day-label-text {
+    font-size: var(--font-size-md);
   }
 
   .weather-icon {
