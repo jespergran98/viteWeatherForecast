@@ -161,7 +161,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
             {/* Logo Section */}
             <div className="logo-section">
               <div className="logo-icon">
-                <img src={`${import.meta.env.BASE_URL}public/assets/logo/logo.png`} alt={`${t('appName')} Logo`} />
+                <img src={`${import.meta.env.BASE_URL}assets/logo/logo.png`} alt={`${t('appName')} Logo`} />
               </div>
               <span className="logo-text">{t('appName')}</span>
             </div>
