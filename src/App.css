@@ -25,13 +25,13 @@
   --color-text-disabled: rgba(255, 255, 255, 0.5);
   --color-text-icon: rgba(255, 255, 255, 0.9);
   
-  /* Graph Colors - Light Mode (intuitive, natural colors) */
-  --color-graph-temperature-fill: rgba(239, 68, 68, 0.25);
-  --color-graph-temperature-stroke: rgba(220, 38, 38, 1);
-  --color-graph-precipitation-fill: rgba(59, 130, 246, 0.25);
-  --color-graph-precipitation-stroke: rgba(37, 99, 235, 1);
-  --color-graph-wind-fill: rgba(34, 197, 94, 0.25);
-  --color-graph-wind-stroke: rgba(22, 163, 74, 1);
+  /* Graph Colors - Light Mode (darker, more visible) */
+  --color-graph-temperature-fill: rgba(230, 130, 0, 0.25);
+  --color-graph-temperature-stroke: rgb(230, 130, 0);
+  --color-graph-precipitation-fill: rgba(12, 94, 218, 0.25);
+  --color-graph-precipitation-stroke: rgb(0, 110, 219, 1);
+  --color-graph-wind-fill: rgba(123, 26, 184, 0.25);
+  --color-graph-wind-stroke: rgba(106, 27, 154, 1);
   
   /* Tab Navigation */
   --color-tab-bg: rgba(255, 255, 255, 0.08);
@@ -152,12 +152,12 @@
   --color-tab-bg-active: rgba(255, 255, 255, 0.1);
   
   /* Graph Colors - Dark Mode (brighter, more vibrant) */
-  --color-graph-temperature-fill: rgba(248, 113, 113, 0.3);
-  --color-graph-temperature-stroke: rgba(248, 113, 113, 1);
-  --color-graph-precipitation-fill: rgba(96, 165, 250, 0.3);
-  --color-graph-precipitation-stroke: rgba(96, 165, 250, 1);
-  --color-graph-wind-fill: rgba(74, 222, 128, 0.3);
-  --color-graph-wind-stroke: rgba(74, 222, 128, 1);
+  --color-graph-temperature-fill: rgba(255, 193, 7, 0.25);
+  --color-graph-temperature-stroke: rgba(255, 193, 7, 1);
+  --color-graph-precipitation-fill: rgba(100, 181, 246, 0.25);
+  --color-graph-precipitation-stroke: rgba(100, 181, 246, 1);
+  --color-graph-wind-fill: rgba(186, 104, 200, 0.25);
+  --color-graph-wind-stroke: rgba(186, 104, 200, 1);
   
   /* Shadows - More prominent in dark mode */
   --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
@@ -186,12 +186,12 @@
     --color-tab-bg: rgba(255, 255, 255, 0.03);
     --color-tab-bg-hover: rgba(255, 255, 255, 0.06);
     --color-tab-bg-active: rgba(255, 255, 255, 0.1);
-    --color-graph-temperature-fill: rgba(248, 113, 113, 0.3);
-    --color-graph-temperature-stroke: rgba(248, 113, 113, 1);
-    --color-graph-precipitation-fill: rgba(96, 165, 250, 0.3);
-    --color-graph-precipitation-stroke: rgba(96, 165, 250, 1);
-    --color-graph-wind-fill: rgba(74, 222, 128, 0.3);
-    --color-graph-wind-stroke: rgba(74, 222, 128, 1);
+    --color-graph-temperature-fill: rgba(255, 193, 7, 0.25);
+    --color-graph-temperature-stroke: rgba(255, 193, 7, 1);
+    --color-graph-precipitation-fill: rgba(100, 181, 246, 0.25);
+    --color-graph-precipitation-stroke: rgba(100, 181, 246, 1);
+    --color-graph-wind-fill: rgba(186, 104, 200, 0.25);
+    --color-graph-wind-stroke: rgba(186, 104, 200, 1);
     --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
