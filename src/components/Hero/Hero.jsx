@@ -20,6 +20,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
   const [locationName, setLocationName] = useState('');
   const [precipitationData, setPrecipitationData] = useState(null);
   const [backgroundImage, setBackgroundImage] = useState('/assets/heroBackgrounds/placeholder.jpg');
+  const [selectedDay, setSelectedDay] = useState(() => new Date());
   const { language } = useLanguage();
 
   const t = (key) => getTranslation(language, key);
@@ -39,13 +40,16 @@ const Hero = ({ darkMode, setDarkMode }) => {
       setWeatherData(weather);
       setLocationName(location);
 
-      // Set background based on temperature and weather
+      // Set background based on current weather (today)
       const bgImage = getBackgroundImage(
         weather.temperature,
         weather.symbolCode,
         darkMode
       );
       setBackgroundImage(bgImage);
+
+      // Reset selected day to today on refresh
+      setSelectedDay(new Date());
 
       // Fetch nowcast data
       try {
@@ -77,17 +81,53 @@ const Hero = ({ darkMode, setDarkMode }) => {
     }
   }, [refreshTrigger]);
 
-  // Update background when dark mode changes
+  // Update background when dark mode changes OR selected day changes
   useEffect(() => {
     if (weatherData) {
+      updateBackgroundForSelectedDay();
+    }
+  }, [darkMode, weatherData, selectedDay]);
+
+  // Function to update background based on selected day
+  const updateBackgroundForSelectedDay = () => {
+    if (!weatherData) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const compareDate = new Date(selectedDay);
+    compareDate.setHours(0, 0, 0, 0);
+    
+    const isToday = today.getTime() === compareDate.getTime();
+
+    if (isToday) {
+      // Use current weather data for today
       const bgImage = getBackgroundImage(
         weatherData.temperature,
         weatherData.symbolCode,
         darkMode
       );
       setBackgroundImage(bgImage);
+    } else {
+      // Find the matching day in dailyForecast
+      const selectedDayData = weatherData.dailyForecast?.find(day => {
+        const dayDate = new Date(day.date);
+        dayDate.setHours(0, 0, 0, 0);
+        return dayDate.getTime() === compareDate.getTime();
+      });
+
+      if (selectedDayData) {
+        // Use average temperature for the selected day
+        const avgTemp = (selectedDayData.maxTemp + selectedDayData.minTemp) / 2;
+        const bgImage = getBackgroundImage(
+          avgTemp,
+          selectedDayData.symbolCode,
+          darkMode
+        );
+        setBackgroundImage(bgImage);
+      }
     }
-  }, [darkMode, weatherData]);
+  };
 
   const handleRefresh = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -99,6 +139,10 @@ const Hero = ({ darkMode, setDarkMode }) => {
 
   const handleMenuClose = () => {
     setMenuOpen(false);
+  };
+
+  const handleDaySelect = (date) => {
+    setSelectedDay(date);
   };
 
   return (
@@ -218,6 +262,8 @@ const Hero = ({ darkMode, setDarkMode }) => {
                 precipitationData={precipitationData}
                 loading={loading}
                 error={error}
+                selectedDay={selectedDay}
+                onDaySelect={handleDaySelect}
               />
             </div>
           </div>

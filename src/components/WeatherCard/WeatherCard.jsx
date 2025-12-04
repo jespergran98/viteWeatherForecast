@@ -15,11 +15,12 @@ const WeatherCard = ({
   locationName, 
   precipitationData,
   loading,
-  error 
+  error,
+  selectedDay,
+  onDaySelect
 }) => {
   const [isFahrenheit, setIsFahrenheit] = useState(false);
   const [activeTab, setActiveTab] = useState('temperature');
-  const [selectedDay, setSelectedDay] = useState(() => new Date());
   const { language } = useLanguage();
 
   const t = (key) => getTranslation(language, key);
@@ -111,10 +112,6 @@ const WeatherCard = ({
     return isFahrenheit 
       ? Math.round(celsiusToFahrenheit(temp))
       : Math.round(temp);
-  };
-
-  const handleDaySelect = (date) => {
-    setSelectedDay(date);
   };
 
   // Get day label (Today, Tomorrow, or day name)
@@ -376,7 +373,7 @@ const WeatherCard = ({
         <WeeklyForecast
           dailyForecast={weatherData.dailyForecast}
           selectedDay={selectedDay}
-          onDaySelect={handleDaySelect}
+          onDaySelect={onDaySelect}
           isFahrenheit={isFahrenheit}
           darkMode={darkMode}
         />
