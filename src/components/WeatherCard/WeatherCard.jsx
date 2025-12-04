@@ -103,10 +103,10 @@ const getWeatherIcon = (symbolCode) => {
       }
       
       const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
+      return `${BASE_URL}public/assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
     } else {
       const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}.svg`;
+      return `${BASE_URL}public/assets/weatherIcons/${theme}/${iconNumber}.svg`;
     }
   };
 
@@ -320,7 +320,7 @@ const getWeatherIcon = (symbolCode) => {
               alt="Weather icon"
               className="weather-icon"
               onError={(e) => {
-                e.target.src = `${import.meta.env.BASE_URL}assets/weatherIcons/lightmode/01d.svg`;
+                e.target.src = `${import.meta.env.BASE_URL}public/assets/weatherIcons/lightmode/01d.svg`;
               }}
             />
             

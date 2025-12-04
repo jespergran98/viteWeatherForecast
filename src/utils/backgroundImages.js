@@ -32,7 +32,7 @@ export const getBackgroundImage = (temperature, symbolCode) => {
   const BASE_URL = import.meta.env.BASE_URL;
   
   if (!symbolCode || temperature == null) {
-    return `${BASE_URL}assets/heroBackgrounds/placeholder.jpg`;
+    return `${BASE_URL}public/assets/heroBackgrounds/placeholder.jpg`;
   }
 
   const tempFolder = temperature >= 0 ? 'plus' : 'minus';
@@ -51,8 +51,8 @@ export const getBackgroundImage = (temperature, symbolCode) => {
       variant = (hour >= 6 && hour < 20) ? 'd' : 'n';
     }
     
-    return `${BASE_URL}assets/heroBackgrounds/${tempFolder}/${iconNumber}${variant}.webp`;
+    return `${BASE_URL}public/assets/heroBackgrounds/${tempFolder}/${iconNumber}${variant}.webp`;
   }
 
-  return `${BASE_URL}assets/heroBackgrounds/${tempFolder}/${iconNumber}.webp`;
+  return `${BASE_URL}public/assets/heroBackgrounds/${tempFolder}/${iconNumber}.webp`;
 };
