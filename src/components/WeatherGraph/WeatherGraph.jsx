@@ -20,7 +20,6 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
 
     if (isToday) {
       // For today, get the next 24 hours starting from current hour
-      const currentHour = now.getHours();
       dayData = hourlyData.slice(0, 24);
     } else {
       // For future days, filter by the selected date
@@ -39,7 +38,6 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
       if (isToday && precipitationData && precipitationData.length > 0) {
         // Use nowcast data for the first 2 hours
         const nowcastHourly = [];
-        const currentHour = currentTime.getHours();
         
         // Group nowcast data by hour and sum precipitation
         precipitationData.forEach(item => {

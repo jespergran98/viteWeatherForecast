@@ -16,8 +16,10 @@ const WeeklyForecast = ({ dailyForecast, selectedDay, onDaySelect, isFahrenheit,
       : Math.round(temp);
   };
 
-  const getWeatherIcon = (symbolCode) => {
-    if (!symbolCode) return null;
+const getWeatherIcon = (symbolCode) => {
+  const BASE_URL = import.meta.env.BASE_URL;
+  
+  if (!symbolCode) return null;
 
     const iconMap = {
       'clearsky': '01',
@@ -63,26 +65,26 @@ const WeeklyForecast = ({ dailyForecast, selectedDay, onDaySelect, isFahrenheit,
       'heavysnow': '50'
     };
 
-    const iconsWithTimeVariants = ['01', '02', '03', '05', '06', '07', '08', '24', '25', '26', '27', '28', '29', '40', '41', '42', '43', '44', '45'];
+  const iconsWithTimeVariants = ['01', '02', '03', '05', '06', '07', '08', '24', '25', '26', '27', '28', '29', '40', '41', '42', '43', '44', '45'];
 
-    let weatherType;
-    if (symbolCode.includes('_')) {
-      const parts = symbolCode.split('_');
-      weatherType = parts.slice(0, -1).join('_');
-    } else {
-      weatherType = symbolCode;
-    }
+  let weatherType;
+  if (symbolCode.includes('_')) {
+    const parts = symbolCode.split('_');
+    weatherType = parts.slice(0, -1).join('_');
+  } else {
+    weatherType = symbolCode;
+  }
 
-    const iconNumber = iconMap[weatherType] || '01';
-    
-    if (iconsWithTimeVariants.includes(iconNumber)) {
-      const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `/assets/weatherIcons/${theme}/${iconNumber}d.svg`;
-    } else {
-      const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `/assets/weatherIcons/${theme}/${iconNumber}.svg`;
-    }
-  };
+  const iconNumber = iconMap[weatherType] || '01';
+  
+  if (iconsWithTimeVariants.includes(iconNumber)) {
+    const theme = darkMode ? 'darkmode' : 'lightmode';
+    return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}d.svg`;
+  } else {
+    const theme = darkMode ? 'darkmode' : 'lightmode';
+    return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}.svg`;
+  }
+};
 
   const getDayLabel = (date, index) => {
     if (index === 0) return t('today');
@@ -114,7 +116,7 @@ const WeeklyForecast = ({ dailyForecast, selectedDay, onDaySelect, isFahrenheit,
                   alt="Weather icon"
                   className="day-icon"
                   onError={(e) => {
-                    e.target.src = '/assets/weatherIcons/lightmode/01d.svg';
+                    e.target.src = `${import.meta.env.BASE_URL}assets/weatherIcons/lightmode/01d.svg`;
                   }}
                 />
               </div>

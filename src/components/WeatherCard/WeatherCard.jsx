@@ -25,10 +25,12 @@ const WeatherCard = ({
 
   const t = (key) => getTranslation(language, key);
 
-  const getWeatherIcon = (symbolCode) => {
-    if (!symbolCode) return null;
+const getWeatherIcon = (symbolCode) => {
+  const BASE_URL = import.meta.env.BASE_URL;
+  
+  if (!symbolCode) return null;
 
-    const iconMap = {
+  const iconMap = {
       'clearsky': '01',
       'fair': '02',
       'partlycloudy': '03',
@@ -85,7 +87,7 @@ const WeatherCard = ({
       weatherType = symbolCode;
       timeVariant = null;
     }
-
+    
     const iconNumber = iconMap[weatherType] || '01';
     
     if (iconsWithTimeVariants.includes(iconNumber)) {
@@ -101,10 +103,10 @@ const WeatherCard = ({
       }
       
       const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `/assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
+      return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
     } else {
       const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `/assets/weatherIcons/${theme}/${iconNumber}.svg`;
+      return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}.svg`;
     }
   };
 
@@ -143,18 +145,44 @@ const WeatherCard = ({
     return today.getTime() === compareDate.getTime();
   };
 
+  // Calculate "feels like" temperature using wind chill or heat index
+  const calculateFeelsLike = (temp, windSpeed, humidity) => {
+    // Wind chill formula (for temperatures below 10°C and wind speed > 4.8 km/h)
+    const windSpeedKmh = windSpeed * 3.6; // Convert m/s to km/h
+    
+    if (temp <= 10 && windSpeedKmh > 4.8) {
+      const windChill = 13.12 + 0.6215 * temp - 11.37 * Math.pow(windSpeedKmh, 0.16) + 0.3965 * temp * Math.pow(windSpeedKmh, 0.16);
+      return windChill;
+    }
+    
+    // Heat index formula (for temperatures above 27°C)
+    if (temp >= 27) {
+      const T = temp;
+      const RH = humidity;
+      const heatIndex = -8.78469475556 + 1.61139411 * T + 2.33854883889 * RH - 0.14611605 * T * RH - 0.012308094 * T * T - 0.0164248277778 * RH * RH + 0.002211732 * T * T * RH + 0.00072546 * T * RH * RH - 0.000003582 * T * T * RH * RH;
+      return heatIndex;
+    }
+    
+    // Otherwise, feels like equals actual temperature
+    return temp;
+  };
+
   // Get data for selected day
   const getSelectedDayData = () => {
     if (!weatherData || !weatherData.dailyForecast) return null;
     
     // If today is selected, use current weather data
     if (isToday(selectedDay)) {
+      const feelsLike = weatherData.feelsLike !== undefined && weatherData.feelsLike !== null
+        ? weatherData.feelsLike
+        : calculateFeelsLike(weatherData.temperature, weatherData.windSpeed, weatherData.humidity);
+      
       return {
         temperature: weatherData.temperature,
         symbolCode: weatherData.symbolCode,
         humidity: weatherData.humidity,
         windSpeed: weatherData.windSpeed,
-        feelsLike: weatherData.feelsLike
+        feelsLike: feelsLike
       };
     }
     
@@ -180,25 +208,30 @@ const WeatherCard = ({
     
     if (dayHourlyData.length === 0) {
       // Fallback to daily averages
+      const avgTemp = (selectedDayData.maxTemp + selectedDayData.minTemp) / 2;
       return {
-        temperature: (selectedDayData.maxTemp + selectedDayData.minTemp) / 2,
+        temperature: avgTemp,
         symbolCode: selectedDayData.symbolCode,
         humidity: 50, // Default if not available
         windSpeed: 0, // Default if not available
-        feelsLike: null
+        feelsLike: avgTemp // Use average temp as feels like
       };
     }
     
     // Calculate averages from hourly data
+    const avgTemp = (selectedDayData.maxTemp + selectedDayData.minTemp) / 2;
     const avgHumidity = dayHourlyData.reduce((sum, h) => sum + (h.humidity || 50), 0) / dayHourlyData.length;
     const avgWindSpeed = dayHourlyData.reduce((sum, h) => sum + (h.windSpeed || 0), 0) / dayHourlyData.length;
     
+    // Calculate feels like for the average conditions
+    const feelsLike = calculateFeelsLike(avgTemp, avgWindSpeed, avgHumidity);
+    
     return {
-      temperature: (selectedDayData.maxTemp + selectedDayData.minTemp) / 2,
+      temperature: avgTemp,
       symbolCode: selectedDayData.symbolCode,
       humidity: avgHumidity,
       windSpeed: avgWindSpeed,
-      feelsLike: null
+      feelsLike: feelsLike
     };
   };
 
@@ -287,7 +320,7 @@ const WeatherCard = ({
               alt="Weather icon"
               className="weather-icon"
               onError={(e) => {
-                e.target.src = '/assets/weatherIcons/lightmode/01d.svg';
+                e.target.src = `${import.meta.env.BASE_URL}assets/weatherIcons/lightmode/01d.svg`;
               }}
             />
             
@@ -322,15 +355,14 @@ const WeatherCard = ({
 
           {/* Weather Details */}
           <div className="weather-details">
-            {selectedDayData.feelsLike !== undefined && selectedDayData.feelsLike !== null && (
-              <div className="detail-item">
-                <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <span>{t('feelsLike')}: {displayTemperature(selectedDayData.feelsLike)}°</span>
-              </div>
-            )}
+            {/* Feels Like - Now always displayed */}
+            <div className="detail-item">
+              <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <span>{t('feelsLike')}: {displayTemperature(selectedDayData.feelsLike)}°</span>
+            </div>
 
             <div className="detail-item">
               <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

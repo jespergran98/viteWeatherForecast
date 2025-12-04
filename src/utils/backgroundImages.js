@@ -29,8 +29,10 @@ const TIME_VARIANT_ICONS = [
  * Gets the background image path based on temperature and weather symbol code
  */
 export const getBackgroundImage = (temperature, symbolCode) => {
+  const BASE_URL = import.meta.env.BASE_URL;
+  
   if (!symbolCode || temperature == null) {
-    return '/assets/heroBackgrounds/placeholder.jpg';
+    return `${BASE_URL}assets/heroBackgrounds/placeholder.jpg`;
   }
 
   const tempFolder = temperature >= 0 ? 'plus' : 'minus';
@@ -49,8 +51,8 @@ export const getBackgroundImage = (temperature, symbolCode) => {
       variant = (hour >= 6 && hour < 20) ? 'd' : 'n';
     }
     
-    return `/assets/heroBackgrounds/${tempFolder}/${iconNumber}${variant}.webp`;
+    return `${BASE_URL}assets/heroBackgrounds/${tempFolder}/${iconNumber}${variant}.webp`;
   }
 
-  return `/assets/heroBackgrounds/${tempFolder}/${iconNumber}.webp`;
+  return `${BASE_URL}assets/heroBackgrounds/${tempFolder}/${iconNumber}.webp`;
 };
