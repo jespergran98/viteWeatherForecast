@@ -431,3 +431,15 @@ viteweatherforecast/
 ├── vite.config.js
 └── viteWeatherForecast
 ```
+
+---
+
+Deploy to GitHub Pages
+build and deploy using Vite:
+
+bash# Build your project
+npm run build
+
+# Deploy to GitHub Pages using gh-pages
+
+npm run deploy

@@ -1,5 +1,5 @@
 // src/components/Hero/Hero.jsx
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard';
 import SideMenu from '../SideMenu/SideMenu';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -25,8 +25,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
 
   const t = (key) => getTranslation(language, key);
 
-  // Removed darkMode from dependencies - only fetch data, don't update background here
-  const fetchWeatherData = useCallback(async () => {
+  const fetchWeatherData = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -40,6 +39,14 @@ const Hero = ({ darkMode, setDarkMode }) => {
 
       setWeatherData(weather);
       setLocationName(location);
+
+      // Set background based on current weather (today)
+      const bgImage = getBackgroundImage(
+        weather.temperature,
+        weather.symbolCode,
+        darkMode
+      );
+      setBackgroundImage(bgImage);
 
       // Reset selected day to today on refresh
       setSelectedDay(new Date());
@@ -62,10 +69,27 @@ const Hero = ({ darkMode, setDarkMode }) => {
     } finally {
       setLoading(false);
     }
-  }, [backgroundImage]); // Removed darkMode dependency
+  };
+
+  useEffect(() => {
+    fetchWeatherData();
+  }, []);
+
+  useEffect(() => {
+    if (refreshTrigger > 0) {
+      fetchWeatherData();
+    }
+  }, [refreshTrigger]);
+
+  // Update background when dark mode changes OR selected day changes
+  useEffect(() => {
+    if (weatherData) {
+      updateBackgroundForSelectedDay();
+    }
+  }, [darkMode, weatherData, selectedDay]);
 
   // Function to update background based on selected day
-  const updateBackgroundForSelectedDay = useCallback(() => {
+  const updateBackgroundForSelectedDay = () => {
     if (!weatherData) return;
 
     const today = new Date();
@@ -103,27 +127,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
         setBackgroundImage(bgImage);
       }
     }
-  }, [weatherData, selectedDay, darkMode]);
-
-  // Initial data fetch
-  useEffect(() => {
-    fetchWeatherData();
-  }, [fetchWeatherData]);
-
-  // Handle manual refresh
-  useEffect(() => {
-    if (refreshTrigger > 0) {
-      fetchWeatherData();
-    }
-  }, [refreshTrigger, fetchWeatherData]);
-
-  // Update background when dark mode changes OR selected day changes
-  // This effect now ONLY updates the background, doesn't refetch data
-  useEffect(() => {
-    if (weatherData) {
-      updateBackgroundForSelectedDay();
-    }
-  }, [darkMode, selectedDay, updateBackgroundForSelectedDay]);
+  };
 
   const handleRefresh = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -157,7 +161,7 @@ const Hero = ({ darkMode, setDarkMode }) => {
             {/* Logo Section */}
             <div className="logo-section">
               <div className="logo-icon">
-                <img src={`${import.meta.env.BASE_URL}assets/logo/logo.png`} alt={`${t('appName')} Logo`} />
+                <img src="/assets/logo/logo.png" alt={`${t('appName')} Logo`} />
               </div>
               <span className="logo-text">{t('appName')}</span>
             </div>
