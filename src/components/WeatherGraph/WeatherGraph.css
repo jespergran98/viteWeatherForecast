@@ -3,6 +3,7 @@
 .weather-graph {
   width: 100%;
   height: 100%;
+  min-height: 140px;
 }
 
 .graph-svg {
@@ -29,13 +30,13 @@
 }
 
 .point-value {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: var(--font-weight-semibold);
   pointer-events: none;
 }
 
 .point-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: var(--font-weight-regular);
   pointer-events: none;
 }
@@ -46,11 +47,33 @@
   justify-content: center;
   text-align: center;
   color: var(--color-text-quaternary);
-  padding: var(--spacing-5xl);
-  font-size: var(--font-size-base);
+  padding: var(--spacing-4xl);
+  font-size: var(--font-size-sm);
   height: 100%;
+  min-height: 140px;
 }
 
+/* Responsive Design - Larger Phones (480px+) */
+@media (min-width: 480px) {
+  .weather-graph {
+    min-height: 160px;
+  }
+
+  .point-value {
+    font-size: 11px;
+  }
+
+  .point-label {
+    font-size: 10px;
+  }
+
+  .no-data {
+    min-height: 160px;
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Responsive Design - Tablet (640px+) */
 @media (min-width: 640px) {
   .point-value {
     font-size: 12px;
@@ -58,5 +81,16 @@
 
   .point-label {
     font-size: 11px;
+  }
+}
+
+/* Responsive Design - Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .weather-graph {
+    min-height: 180px;
+  }
+
+  .no-data {
+    min-height: 180px;
   }
 }

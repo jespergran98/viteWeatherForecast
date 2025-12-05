@@ -23,7 +23,7 @@
   left: 0;
   right: 0;
   z-index: 10;
-  padding: var(--spacing-4xl) var(--spacing-2xl);
+  padding: var(--spacing-2xl) var(--spacing-xl);
 }
 
 .navbar-content {
@@ -38,7 +38,7 @@
 .logo-section {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-md);
 }
 
 .logo-icon {
@@ -63,7 +63,7 @@
 
 .logo-text {
   color: white;
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-tight);
 }
@@ -72,11 +72,11 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .nav-btn {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   background: var(--color-glass-bg-strong);
   backdrop-filter: var(--backdrop-blur-sm);
   -webkit-backdrop-filter: var(--backdrop-blur-sm);
@@ -103,8 +103,8 @@
 }
 
 .icon {
-  width: var(--icon-size-lg);
-  height: var(--icon-size-lg);
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
   color: white;
 }
 
@@ -135,7 +135,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 6rem var(--spacing-2xl) var(--spacing-5xl);
+  padding: 5rem var(--spacing-xl) var(--spacing-3xl);
 }
 
 /* Glass Card */
@@ -148,17 +148,52 @@
   background: var(--color-glass-bg);
   backdrop-filter: var(--backdrop-blur-md);
   -webkit-backdrop-filter: var(--backdrop-blur-md);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   border: 1px solid var(--color-glass-border);
   box-shadow: var(--shadow-xl);
-  padding: var(--spacing-5xl) var(--spacing-4xl);
-  min-height: 28rem;
+  padding: 0;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Responsive Design - Tablet */
+/* Responsive Design - Small Phones (360px+) */
+@media (min-width: 360px) {
+  .navbar {
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+  }
+
+  .logo-section {
+    gap: var(--spacing-lg);
+  }
+
+  .logo-text {
+    font-size: var(--font-size-xl);
+  }
+
+  .nav-actions {
+    gap: var(--spacing-md);
+  }
+
+  .nav-btn {
+    padding: var(--spacing-lg);
+  }
+
+  .icon {
+    width: var(--icon-size-lg);
+    height: var(--icon-size-lg);
+  }
+}
+
+/* Responsive Design - Larger Phones (480px+) */
+@media (min-width: 480px) {
+  .hero-content {
+    padding: 5.5rem var(--spacing-2xl) var(--spacing-4xl);
+  }
+}
+
+/* Responsive Design - Tablet (640px+) */
 @media (min-width: 640px) {
   .navbar {
     padding: var(--spacing-4xl);
@@ -177,17 +212,20 @@
     gap: var(--spacing-xl);
   }
   
-  .card-inner {
-    padding: var(--spacing-6xl) var(--spacing-5xl);
-    min-height: 30rem;
-  }
-  
   .glass-card {
     max-width: var(--container-md);
   }
+
+  .card-inner {
+    border-radius: var(--radius-xl);
+  }
+
+  .hero-content {
+    padding: 6rem var(--spacing-3xl) var(--spacing-5xl);
+  }
 }
 
-/* Responsive Design - Desktop */
+/* Responsive Design - Desktop (1024px+) */
 @media (min-width: 1024px) {
   .navbar {
     padding: var(--spacing-5xl);
@@ -196,19 +234,11 @@
   .glass-card {
     max-width: var(--container-lg);
   }
-  
-  .card-inner {
-    padding: var(--spacing-7xl) var(--spacing-6xl);
-    min-height: 32rem;
-  }
 }
 
+/* Responsive Design - Large Desktop (1280px+) */
 @media (min-width: 1280px) {
   .glass-card {
     max-width: var(--container-xl);
-  }
-  
-  .card-inner {
-    padding: 3.5rem var(--spacing-7xl);
   }
 }

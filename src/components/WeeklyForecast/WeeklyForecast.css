@@ -2,15 +2,15 @@
 
 .weekly-forecast {
   width: 100%;
-  margin-top: var(--spacing-4xl);
-  padding-top: var(--spacing-4xl);
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-3xl);
   border-top: 1px solid var(--color-glass-border);
 }
 
 .forecast-scroll {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-  gap: var(--spacing-sm);
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: var(--spacing-xs);
   width: 100%;
 }
 
@@ -18,11 +18,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-xl) var(--spacing-sm);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md) var(--spacing-xs);
   background: var(--color-glass-bg);
   border: 1px solid var(--color-glass-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
   width: 100%;
@@ -44,12 +44,13 @@
 }
 
 .day-label {
-  font-size: var(--font-size-xs);
+  font-size: 0.65rem;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
   text-transform: capitalize;
   white-space: nowrap;
   text-align: center;
+  line-height: 1.2;
 }
 
 .day-card.selected .day-label {
@@ -58,8 +59,8 @@
 }
 
 .day-icon-wrapper {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,14 +70,14 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .day-temps {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  font-size: var(--font-size-sm);
+  gap: 2px;
+  font-size: 0.7rem;
   font-weight: var(--font-weight-medium);
 }
 
@@ -88,20 +89,69 @@
   color: var(--color-text-tertiary);
 }
 
-/* Responsive Design - Small devices */
-@media (min-width: 480px) {
+/* Responsive Design - Small Phones (360px+) */
+@media (min-width: 360px) {
   .forecast-scroll {
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+    gap: var(--spacing-sm);
+  }
+
+  .day-card {
+    padding: var(--spacing-lg) var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+
+  .day-label {
+    font-size: var(--font-size-xs);
+  }
+
+  .day-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .day-temps {
+    font-size: var(--font-size-xs);
+    gap: var(--spacing-xs);
+  }
+}
+
+/* Responsive Design - Larger Phones (480px+) */
+@media (min-width: 480px) {
+  .weekly-forecast {
+    margin-top: var(--spacing-4xl);
+    padding-top: var(--spacing-4xl);
+  }
+
+  .forecast-scroll {
+    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
     gap: var(--spacing-md);
   }
 
   .day-card {
-    padding: var(--spacing-2xl) var(--spacing-md);
+    padding: var(--spacing-xl) var(--spacing-md);
     gap: var(--spacing-md);
+    border-radius: var(--radius-md);
   }
 
   .day-label {
     font-size: var(--font-size-sm);
+  }
+
+  .day-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .day-temps {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Responsive Design - Tablet (640px+) */
+@media (min-width: 640px) {
+  .forecast-scroll {
+    grid-template-columns: repeat(8, 1fr);
   }
 
   .day-icon-wrapper {
@@ -114,16 +164,11 @@
   }
 }
 
-/* Responsive Design - Tablet and Up */
+/* Responsive Design - Tablet Landscape / Small Desktop (768px+) */
 @media (min-width: 768px) {
   .weekly-forecast {
     margin-top: var(--spacing-5xl);
     padding-top: var(--spacing-5xl);
-  }
-
-  .forecast-scroll {
-    grid-template-columns: repeat(8, 1fr);
-    gap: var(--spacing-md);
   }
 
   .day-card {
@@ -144,7 +189,7 @@
   }
 }
 
-/* Responsive Design - Desktop */
+/* Responsive Design - Desktop (1024px+) */
 @media (min-width: 1024px) {
   .forecast-scroll {
     gap: var(--spacing-lg);
