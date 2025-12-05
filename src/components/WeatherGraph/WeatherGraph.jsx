@@ -20,12 +20,23 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
 
     if (isToday) {
       // For today, get the next 24 hours starting from current hour
-      dayData = hourlyData.slice(0, 24);
+      // Filter to only include items from current hour onwards
+      dayData = hourlyData.filter(item => {
+        const itemTime = new Date(item.time);
+        return itemTime >= now;
+      }).slice(0, 24);
     } else {
-      // For future days, filter by the selected date
-      dayData = hourlyData.filter(item => 
-        item.date === selectedDateString
-      ).slice(0, 24);
+      // For future days, get all hours for that specific calendar day (00:00 to 23:59)
+      const selectedDayStart = new Date(selectedDay);
+      selectedDayStart.setHours(0, 0, 0, 0);
+      
+      const selectedDayEnd = new Date(selectedDay);
+      selectedDayEnd.setHours(23, 59, 59, 999);
+
+      dayData = hourlyData.filter(item => {
+        const itemTime = new Date(item.time);
+        return itemTime >= selectedDayStart && itemTime <= selectedDayEnd;
+      }).slice(0, 24);
     }
 
     if (type === 'precipitation') {
@@ -42,7 +53,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
         // Group nowcast data by hour and sum precipitation
         precipitationData.forEach(item => {
           const itemTime = new Date(item.time);
-          if (itemTime <= twoHoursFromNow) {
+          if (itemTime <= twoHoursFromNow && itemTime >= currentTime) {
             const hour = itemTime.getHours();
             const existingHour = nowcastHourly.find(h => h.hour === hour);
             
@@ -71,34 +82,44 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
         });
 
         remainingHours.forEach(item => {
+          const itemTime = new Date(item.time);
           mergedData.push({
-            label: `${String(item.hour).padStart(2, '0')}:00`,
+            label: `${String(itemTime.getHours()).padStart(2, '0')}:00`,
             value: item.precipitation,
             unit: 'mm'
           });
         });
       } else {
         // Not today or no nowcast data, use all hourly data
-        mergedData = dayData.map(item => ({
-          label: `${String(item.hour).padStart(2, '0')}:00`,
-          value: item.precipitation,
-          unit: 'mm'
-        }));
+        mergedData = dayData.map(item => {
+          const itemTime = new Date(item.time);
+          return {
+            label: `${String(itemTime.getHours()).padStart(2, '0')}:00`,
+            value: item.precipitation,
+            unit: 'mm'
+          };
+        });
       }
 
       return mergedData;
     } else if (type === 'temperature') {
-      return dayData.map(item => ({
-        label: `${String(item.hour).padStart(2, '0')}:00`,
-        value: item.temperature,
-        unit: '°C'
-      }));
+      return dayData.map(item => {
+        const itemTime = new Date(item.time);
+        return {
+          label: `${String(itemTime.getHours()).padStart(2, '0')}:00`,
+          value: item.temperature,
+          unit: '°C'
+        };
+      });
     } else if (type === 'wind') {
-      return dayData.map(item => ({
-        label: `${String(item.hour).padStart(2, '0')}:00`,
-        value: item.windSpeed,
-        unit: 'm/s'
-      }));
+      return dayData.map(item => {
+        const itemTime = new Date(item.time);
+        return {
+          label: `${String(itemTime.getHours()).padStart(2, '0')}:00`,
+          value: item.windSpeed,
+          unit: 'm/s'
+        };
+      });
     }
     return [];
   };
@@ -142,7 +163,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
 
   const width = 400;
   const height = 180;
-  const padding = { top: 20, right: 10, bottom: 30, left: 10 };
+  const padding = { top: 20, right: 20, bottom: 30, left: 20 };
   const graphWidth = width - padding.left - padding.right;
   const graphHeight = height - padding.top - padding.bottom;
 
@@ -151,7 +172,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
   const range = maxValue - minValue || 1;
 
   const points = chartData.map((item, index) => {
-    const x = padding.left + (index / (chartData.length - 1)) * graphWidth;
+    const x = padding.left + (index / Math.max(chartData.length - 1, 1)) * graphWidth;
     const y = padding.top + graphHeight - ((item.value - minValue) / range) * graphHeight;
     return { x, y, value: item.value, label: item.label };
   });
