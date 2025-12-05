@@ -1,20 +1,34 @@
 // src/services/geocodingService.js
 
+import ky from 'ky';
+
 /**
  * Converts geographic coordinates to a human-readable location name
+ * @param {number} latitude - Latitude coordinate
+ * @param {number} longitude - Longitude coordinate
+ * @returns {Promise<string>} Human-readable location name
  */
 export const getLocationName = async (latitude, longitude) => {
   try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&accept-language=en`,
-      { headers: { 'Accept': 'application/json' } }
-    );
+    const data = await ky.get('https://nominatim.openstreetmap.org/reverse', {
+      searchParams: {
+        format: 'json',
+        lat: latitude,
+        lon: longitude,
+        zoom: 10,
+        'accept-language': 'en'
+      },
+      headers: {
+        'Accept': 'application/json'
+      },
+      timeout: 10000,
+      retry: {
+        limit: 2,
+        methods: ['get'],
+        statusCodes: [408, 413, 429, 500, 502, 503, 504]
+      }
+    }).json();
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch location name');
-    }
-
-    const data = await response.json();
     const address = data.address || {};
     
     return address.city || 

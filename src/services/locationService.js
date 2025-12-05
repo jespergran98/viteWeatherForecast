@@ -8,6 +8,8 @@ const ERROR_MESSAGES = {
 
 /**
  * Gets the user's current geographic location using the browser's Geolocation API
+ * @returns {Promise<{latitude: number, longitude: number}>} User's coordinates
+ * @throws {Error} When geolocation fails or is not supported
  */
 export const getUserLocation = () => {
   return new Promise((resolve, reject) => {

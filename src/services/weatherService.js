@@ -1,29 +1,54 @@
 // src/services/weatherService.js
 
+import ky from 'ky';
+
 const WEATHER_API_BASE = 'https://api.met.no/weatherapi';
 const USER_AGENT = 'VaerVarsel/1.0 github.com/weather-app';
 
 /**
+ * Unified ky instance for MET Norway API with shared configuration
+ */
+const weatherAPI = ky.create({
+  prefixUrl: WEATHER_API_BASE,
+  headers: {
+    'User-Agent': USER_AGENT
+  },
+  timeout: 15000,
+  retry: {
+    limit: 3,
+    methods: ['get'],
+    statusCodes: [408, 413, 429, 500, 502, 503, 504]
+  }
+});
+
+/**
  * Unified fetch helper for MET Norway API
+ * @param {string} endpoint - API endpoint path
+ * @param {number} latitude - Latitude coordinate
+ * @param {number} longitude - Longitude coordinate
+ * @returns {Promise<Object>} Parsed JSON response
+ * @throws {Error} When API request fails
  */
 const fetchWeatherAPI = async (endpoint, latitude, longitude) => {
   const lat = parseFloat(latitude.toFixed(4));
   const lon = parseFloat(longitude.toFixed(4));
-  const url = `${WEATHER_API_BASE}/${endpoint}?lat=${lat}&lon=${lon}`;
 
-  const response = await fetch(url, {
-    headers: { 'User-Agent': USER_AGENT }
-  });
-  
-  if (!response.ok) {
-    throw new Error(`Weather API error: ${response.status}`);
+  try {
+    return await weatherAPI.get(endpoint, {
+      searchParams: { lat, lon }
+    }).json();
+  } catch (error) {
+    console.error(`Weather API error for ${endpoint}:`, error);
+    throw error;
   }
-  
-  return response.json();
 };
 
 /**
  * Fetches weather forecast data from MET Norway's Locationforecast API
+ * @param {number} latitude - Latitude coordinate
+ * @param {number} longitude - Longitude coordinate
+ * @returns {Promise<Object>} Parsed weather data
+ * @throws {Error} When API request or parsing fails
  */
 export const getWeatherData = async (latitude, longitude) => {
   try {
@@ -37,6 +62,10 @@ export const getWeatherData = async (latitude, longitude) => {
 
 /**
  * Fetches precipitation nowcast data from MET Norway's Nowcast API
+ * @param {number} latitude - Latitude coordinate
+ * @param {number} longitude - Longitude coordinate
+ * @returns {Promise<Array>} Array of precipitation data points
+ * @throws {Error} When API request or parsing fails
  */
 export const getNowcastData = async (latitude, longitude) => {
   try {
@@ -50,6 +79,9 @@ export const getNowcastData = async (latitude, longitude) => {
 
 /**
  * Parses the MET Norway API response to extract weather data
+ * @param {Object} data - Raw API response
+ * @returns {Object} Structured weather data with current conditions and forecasts
+ * @throws {Error} When data format is invalid
  */
 const parseWeatherData = (data) => {
   const timeseries = data?.properties?.timeseries;
@@ -61,7 +93,7 @@ const parseWeatherData = (data) => {
   const instant = current.data.instant.details;
   const symbolData = current.data.next_1_hours || current.data.next_6_hours || current.data.next_12_hours;
 
-  // Parse hourly forecast - UPDATED to include humidity and windSpeed
+  // Parse hourly forecast - includes temperature, wind, humidity, precipitation
   const hourlyForecast = timeseries.map(entry => {
     const time = new Date(entry.time);
     const details = entry.data.instant.details;
@@ -71,7 +103,7 @@ const parseWeatherData = (data) => {
       time,
       temperature: details.air_temperature,
       windSpeed: details.wind_speed,
-      humidity: details.relative_humidity, // Added humidity to hourly data
+      humidity: details.relative_humidity,
       precipitation: entry.data.next_1_hours?.details?.precipitation_amount || 0,
       symbolCode: hourSymbolData?.summary?.symbol_code || 'clearsky_day',
       hour: time.getHours(),
@@ -98,6 +130,8 @@ const parseWeatherData = (data) => {
 
 /**
  * Parses daily forecast from hourly timeseries data
+ * @param {Array} timeseries - Array of hourly forecast entries
+ * @returns {Array} Array of daily forecast objects
  */
 const parseDailyForecast = (timeseries) => {
   const dailyData = {};
@@ -139,6 +173,9 @@ const parseDailyForecast = (timeseries) => {
 
 /**
  * Parses nowcast API response to extract precipitation data
+ * @param {Object} data - Raw API response
+ * @returns {Array} Array of precipitation data points
+ * @throws {Error} When data format is invalid
  */
 const parseNowcastData = (data) => {
   const timeseries = data?.properties?.timeseries;
@@ -159,6 +196,8 @@ const parseNowcastData = (data) => {
 
 /**
  * Gets the most frequently occurring item in an array
+ * @param {Array} arr - Array of items
+ * @returns {*} Most frequent item
  */
 const getMostFrequent = (arr) => {
   const frequency = {};
@@ -178,11 +217,14 @@ const getMostFrequent = (arr) => {
 
 /**
  * Converts Celsius to Fahrenheit
+ * @param {number} celsius - Temperature in Celsius
+ * @returns {number} Temperature in Fahrenheit
  */
 export const celsiusToFahrenheit = (celsius) => (celsius * 9/5) + 32;
 
 /**
  * Determines if it's currently daytime based on time of day
+ * @returns {boolean} True if daytime (6 AM - 8 PM), false otherwise
  */
 export const isDaytime = () => {
   const hour = new Date().getHours();
