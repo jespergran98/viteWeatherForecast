@@ -9,7 +9,7 @@
 
 .forecast-scroll {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-xs);
   width: 100%;
 }
@@ -92,7 +92,6 @@
 /* Responsive Design - Small Phones (360px+) */
 @media (min-width: 360px) {
   .forecast-scroll {
-    grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
     gap: var(--spacing-sm);
   }
 
@@ -124,7 +123,6 @@
   }
 
   .forecast-scroll {
-    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
     gap: var(--spacing-md);
   }
 
@@ -148,12 +146,8 @@
   }
 }
 
-/* Responsive Design - Tablet (640px+) */
+/* Responsive Design - Tablet (640px+) - Still 4 columns */
 @media (min-width: 640px) {
-  .forecast-scroll {
-    grid-template-columns: repeat(8, 1fr);
-  }
-
   .day-icon-wrapper {
     width: 44px;
     height: 44px;
@@ -164,7 +158,7 @@
   }
 }
 
-/* Responsive Design - Tablet Landscape / Small Desktop (768px+) */
+/* Responsive Design - Tablet Landscape / Small Desktop (768px+) - Still 4 columns */
 @media (min-width: 768px) {
   .weekly-forecast {
     margin-top: var(--spacing-5xl);
@@ -189,9 +183,10 @@
   }
 }
 
-/* Responsive Design - Desktop (1024px+) */
+/* Responsive Design - Desktop (1024px+) - Switch to 8 columns */
 @media (min-width: 1024px) {
   .forecast-scroll {
+    grid-template-columns: repeat(8, 1fr);
     gap: var(--spacing-lg);
   }
 

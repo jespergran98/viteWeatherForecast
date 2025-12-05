@@ -313,71 +313,77 @@ const getWeatherIcon = (symbolCode) => {
             </div>
           </div>
 
-          {/* Weather Icon and Temperature */}
+          {/* Weather Icon, Temperature, Description and Details - Two column layout on mobile */}
           <div className="weather-main">
-            <img
-              src={getWeatherIcon(selectedDayData.symbolCode)}
-              alt="Weather icon"
-              className="weather-icon"
-              onError={(e) => {
-                e.target.src = `${import.meta.env.BASE_URL}assets/weatherIcons/lightmode/01d.svg`;
-              }}
-            />
-            
-            <div className="temp-section">
-              <div className="temperature-display">
-                <span className="temp-value">{displayTemperature(selectedDayData.temperature)}</span>
-                <div className="temp-units">
-                  <button
-                    className={`unit-button ${!isFahrenheit ? 'active' : ''}`}
-                    onClick={() => setIsFahrenheit(false)}
-                  >
-                    {t('celsius')}
-                  </button>
-                  <span className="unit-divider">|</span>
-                  <button
-                    className={`unit-button ${isFahrenheit ? 'active' : ''}`}
-                    onClick={() => setIsFahrenheit(true)}
-                  >
-                    {t('fahrenheit')}
-                  </button>
+            {/* Left Column: Icon and Temperature */}
+            <div className="weather-left-group">
+              <img
+                src={getWeatherIcon(selectedDayData.symbolCode)}
+                alt="Weather icon"
+                className="weather-icon"
+                onError={(e) => {
+                  e.target.src = `${import.meta.env.BASE_URL}assets/weatherIcons/lightmode/01d.svg`;
+                }}
+              />
+              
+              <div className="temp-section">
+                <div className="temperature-display">
+                  <span className="temp-value">{displayTemperature(selectedDayData.temperature)}</span>
+                  <div className="temp-units">
+                    <button
+                      className={`unit-button ${!isFahrenheit ? 'active' : ''}`}
+                      onClick={() => setIsFahrenheit(false)}
+                    >
+                      {t('celsius')}
+                    </button>
+                    <span className="unit-divider">|</span>
+                    <button
+                      className={`unit-button ${isFahrenheit ? 'active' : ''}`}
+                      onClick={() => setIsFahrenheit(true)}
+                    >
+                      {t('fahrenheit')}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Weather Description */}
-          {weatherDescription && (
-            <div className="weather-description">
-              <p className="description-text">{weatherDescription}</p>
-            </div>
-          )}
+            {/* Right Column: Description and Details */}
+            <div className="weather-right-group">
+              {/* Weather Description */}
+              {weatherDescription && (
+                <div className="weather-description">
+                  <p className="description-text">{weatherDescription}</p>
+                </div>
+              )}
 
-          {/* Weather Details */}
-          <div className="weather-details">
-            {/* Feels Like - Now always displayed */}
-            <div className="detail-item">
-              <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-              <span>{t('feelsLike')}: {displayTemperature(selectedDayData.feelsLike)}°</span>
-            </div>
+              {/* Weather Details */}
+              <div className="weather-details">
+                {/* Feels Like - Now always displayed */}
+                <div className="detail-item">
+                  <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <span>{t('feelsLike')}: {displayTemperature(selectedDayData.feelsLike)}°</span>
+                </div>
 
-            <div className="detail-item">
-              <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-              </svg>
-              <span>{t('humidity')}: {Math.round(selectedDayData.humidity)}{t('percent')}</span>
-            </div>
+                <div className="detail-item">
+                  <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                  </svg>
+                  <span>{t('humidity')}: {Math.round(selectedDayData.humidity)}{t('percent')}</span>
+                </div>
 
-            <div className="detail-item">
-              <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-              <span>{t('windSpeed')}: {Math.round(selectedDayData.windSpeed)} {t('metersPerSecond')}</span>
+                <div className="detail-item">
+                  <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                  <span>{t('windSpeed')}: {Math.round(selectedDayData.windSpeed)} {t('metersPerSecond')}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

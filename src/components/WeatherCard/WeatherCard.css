@@ -65,11 +65,21 @@
   line-height: 1.2;
 }
 
-/* Weather Main */
+/* Weather Main - Mobile: Two column layout (left: icon+temp, right: details) */
 .weather-main {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-lg);
+}
+
+/* Left side container for icon and temperature - takes up half width */
+.weather-left-group {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-md);
+  align-items: center;
+  flex: 1;
+  min-width: 0;
 }
 
 .weather-icon {
@@ -86,10 +96,12 @@
   flex-direction: column;
   gap: var(--spacing-xs);
   flex: 1;
+  min-width: 0;
 }
 
 .temperature-display {
   display: flex;
+  flex-direction: row;
   align-items: flex-start;
   gap: var(--spacing-xs);
 }
@@ -106,7 +118,6 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding-top: 4px;
 }
 
 .unit-button {
@@ -136,6 +147,15 @@
   font-weight: var(--font-weight-light);
 }
 
+/* Right side container for description and details - takes up half width */
+.weather-right-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
+}
+
 /* Weather Description */
 .weather-description {
   margin-top: 0;
@@ -150,9 +170,9 @@
 
 /* Weather Details */
 .weather-details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-sm) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .detail-item {
@@ -350,11 +370,6 @@
     font-size: var(--font-size-sm);
   }
 
-  .weather-details {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-md) var(--spacing-xl);
-  }
-
   .detail-item {
     font-size: var(--font-size-sm);
   }
@@ -414,10 +429,23 @@
     font-size: var(--font-size-base);
   }
 
+  /* Switch to vertical stacking at 768px+ */
   .weather-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Keep horizontal layout for icon and temperature even at 768px+ */
+  .weather-left-group {
+    display: flex;
     flex-direction: row;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
+    width: 100%;
+  }
+
+  .weather-right-group {
+    display: contents;
   }
 
   .weather-icon {
@@ -436,6 +464,7 @@
   }
 
   .weather-details {
+    display: grid;
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
