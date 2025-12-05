@@ -25,70 +25,41 @@ const WeatherCard = ({
 
   const t = (key) => getTranslation(language, key);
 
-const getWeatherIcon = (symbolCode) => {
-  const BASE_URL = import.meta.env.BASE_URL;
-  
-  if (!symbolCode) return null;
+  const getWeatherIcon = (symbolCode) => {
+    const BASE_URL = import.meta.env.BASE_URL;
+    
+    if (!symbolCode) return null;
 
-  const iconMap = {
-      'clearsky': '01',
-      'fair': '02',
-      'partlycloudy': '03',
-      'cloudy': '04',
-      'rainshowers': '05',
-      'rainshowersandthunder': '06',
-      'sleetshowers': '07',
-      'snowshowers': '08',
-      'rain': '09',
-      'heavyrain': '10',
-      'heavyrainandthunder': '11',
-      'sleet': '12',
-      'snow': '13',
-      'snowandthunder': '14',
-      'fog': '15',
-      'sleetshowersandthunder': '20',
-      'snowshowersandthunder': '21',
-      'rainandthunder': '22',
-      'sleetandthunder': '23',
-      'lightrainshowersandthunder': '24',
-      'heavyrainshowersandthunder': '25',
-      'lightsleetshowersandthunder': '26',
-      'heavysleetshowersandthunder': '27',
-      'lightsnowshowersandthunder': '28',
-      'heavysnowshowersandthunder': '29',
-      'lightrainandthunder': '30',
-      'lightsleetandthunder': '31',
-      'heavysleetandthunder': '32',
-      'lightsnowandthunder': '33',
-      'heavysnowandthunder': '34',
-      'lightrainshowers': '40',
-      'heavyrainshowers': '41',
-      'lightsleetshowers': '42',
-      'heavysleetshowers': '43',
-      'lightsnowshowers': '44',
-      'heavysnowshowers': '45',
-      'lightrain': '46',
-      'lightsleet': '47',
-      'heavysleet': '48',
-      'lightsnow': '49',
-      'heavysnow': '50'
+    const iconMap = {
+      'clearsky': '01', 'fair': '02', 'partlycloudy': '03', 'cloudy': '04',
+      'rainshowers': '05', 'rainshowersandthunder': '06', 'sleetshowers': '07',
+      'snowshowers': '08', 'rain': '09', 'heavyrain': '10', 'heavyrainandthunder': '11',
+      'sleet': '12', 'snow': '13', 'snowandthunder': '14', 'fog': '15',
+      'sleetshowersandthunder': '20', 'snowshowersandthunder': '21',
+      'rainandthunder': '22', 'sleetandthunder': '23',
+      'lightrainshowersandthunder': '24', 'heavyrainshowersandthunder': '25',
+      'lightsleetshowersandthunder': '26', 'heavysleetshowersandthunder': '27',
+      'lightsnowshowersandthunder': '28', 'heavysnowshowersandthunder': '29',
+      'lightrainandthunder': '30', 'lightsleetandthunder': '31',
+      'heavysleetandthunder': '32', 'lightsnowandthunder': '33',
+      'heavysnowandthunder': '34', 'lightrainshowers': '40',
+      'heavyrainshowers': '41', 'lightsleetshowers': '42',
+      'heavysleetshowers': '43', 'lightsnowshowers': '44',
+      'heavysnowshowers': '45', 'lightrain': '46', 'lightsleet': '47',
+      'heavysleet': '48', 'lightsnow': '49', 'heavysnow': '50'
     };
 
-    const iconsWithTimeVariants = ['01', '02', '03', '05', '06', '07', '08', '24', '25', '26', '27', '28', '29', '40', '41', '42', '43', '44', '45'];
+    const iconsWithTimeVariants = [
+      '01', '02', '03', '05', '06', '07', '08', '24', '25', '26', 
+      '27', '28', '29', '40', '41', '42', '43', '44', '45'
+    ];
 
-    let weatherType;
-    let timeVariant;
-
-    if (symbolCode.includes('_')) {
-      const parts = symbolCode.split('_');
-      timeVariant = parts[parts.length - 1];
-      weatherType = parts.slice(0, -1).join('_');
-    } else {
-      weatherType = symbolCode;
-      timeVariant = null;
-    }
+    const [weatherType, timeVariant] = symbolCode.includes('_')
+      ? [symbolCode.substring(0, symbolCode.lastIndexOf('_')), symbolCode.split('_').pop()]
+      : [symbolCode, null];
     
     const iconNumber = iconMap[weatherType] || '01';
+    const theme = darkMode ? 'darkmode' : 'lightmode';
     
     if (iconsWithTimeVariants.includes(iconNumber)) {
       let variant = 'd';
@@ -102,12 +73,10 @@ const getWeatherIcon = (symbolCode) => {
         variant = (hour >= 6 && hour < 20) ? 'd' : 'n';
       }
       
-      const theme = darkMode ? 'darkmode' : 'lightmode';
       return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}${variant}.svg`;
-    } else {
-      const theme = darkMode ? 'darkmode' : 'lightmode';
-      return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}.svg`;
     }
+    
+    return `${BASE_URL}assets/weatherIcons/${theme}/${iconNumber}.svg`;
   };
 
   const displayTemperature = (temp) => {
@@ -116,7 +85,6 @@ const getWeatherIcon = (symbolCode) => {
       : Math.round(temp);
   };
 
-  // Get day label (Today, Tomorrow, or day name)
   const getDayLabel = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -124,17 +92,14 @@ const getWeatherIcon = (symbolCode) => {
     const compareDate = new Date(date);
     compareDate.setHours(0, 0, 0, 0);
     
-    const diffTime = compareDate - today;
-    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.round((compareDate - today) / (1000 * 60 * 60 * 24));
     
     if (diffDays === 0) return t('today');
     if (diffDays === 1) return t('tomorrow');
     
-    const fullDays = t('fullDays');
-    return fullDays[compareDate.getDay()];
+    return t('fullDays')[compareDate.getDay()];
   };
 
-  // Check if selected day is today
   const isToday = (date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -145,48 +110,46 @@ const getWeatherIcon = (symbolCode) => {
     return today.getTime() === compareDate.getTime();
   };
 
-  // Calculate "feels like" temperature using wind chill or heat index
   const calculateFeelsLike = (temp, windSpeed, humidity) => {
-    // Wind chill formula (for temperatures below 10°C and wind speed > 4.8 km/h)
-    const windSpeedKmh = windSpeed * 3.6; // Convert m/s to km/h
+    const windSpeedKmh = windSpeed * 3.6;
     
+    // Wind chill formula (temp ≤ 10°C and wind > 4.8 km/h)
     if (temp <= 10 && windSpeedKmh > 4.8) {
-      const windChill = 13.12 + 0.6215 * temp - 11.37 * Math.pow(windSpeedKmh, 0.16) + 0.3965 * temp * Math.pow(windSpeedKmh, 0.16);
-      return windChill;
+      return 13.12 + 0.6215 * temp - 11.37 * Math.pow(windSpeedKmh, 0.16) + 
+             0.3965 * temp * Math.pow(windSpeedKmh, 0.16);
     }
     
-    // Heat index formula (for temperatures above 27°C)
+    // Heat index formula (temp ≥ 27°C)
     if (temp >= 27) {
       const T = temp;
       const RH = humidity;
-      const heatIndex = -8.78469475556 + 1.61139411 * T + 2.33854883889 * RH - 0.14611605 * T * RH - 0.012308094 * T * T - 0.0164248277778 * RH * RH + 0.002211732 * T * T * RH + 0.00072546 * T * RH * RH - 0.000003582 * T * T * RH * RH;
-      return heatIndex;
+      return -8.78469475556 + 1.61139411 * T + 2.33854883889 * RH - 
+             0.14611605 * T * RH - 0.012308094 * T * T - 
+             0.0164248277778 * RH * RH + 0.002211732 * T * T * RH + 
+             0.00072546 * T * RH * RH - 0.000003582 * T * T * RH * RH;
     }
     
-    // Otherwise, feels like equals actual temperature
     return temp;
   };
 
-  // Get data for selected day
   const getSelectedDayData = () => {
-    if (!weatherData || !weatherData.dailyForecast) return null;
+    if (!weatherData?.dailyForecast) return null;
     
-    // If today is selected, use current weather data
+    // Use current weather data for today
     if (isToday(selectedDay)) {
-      const feelsLike = weatherData.feelsLike !== undefined && weatherData.feelsLike !== null
-        ? weatherData.feelsLike
-        : calculateFeelsLike(weatherData.temperature, weatherData.windSpeed, weatherData.humidity);
+      const feelsLike = weatherData.feelsLike ?? 
+        calculateFeelsLike(weatherData.temperature, weatherData.windSpeed, weatherData.humidity);
       
       return {
         temperature: weatherData.temperature,
         symbolCode: weatherData.symbolCode,
         humidity: weatherData.humidity,
         windSpeed: weatherData.windSpeed,
-        feelsLike: feelsLike
+        feelsLike
       };
     }
     
-    // Otherwise, find the matching day in dailyForecast
+    // Find matching day in forecast
     const selectedDayData = weatherData.dailyForecast.find(day => {
       const dayDate = new Date(day.date);
       dayDate.setHours(0, 0, 0, 0);
@@ -197,7 +160,7 @@ const getWeatherIcon = (symbolCode) => {
     
     if (!selectedDayData) return null;
     
-    // For future days, calculate average values from hourly forecast
+    // Get hourly data for the selected day
     const dayHourlyData = weatherData.hourlyForecast.filter(hour => {
       const hourDate = new Date(hour.time);
       hourDate.setHours(0, 0, 0, 0);
@@ -206,24 +169,21 @@ const getWeatherIcon = (symbolCode) => {
       return hourDate.getTime() === selDate.getTime();
     });
     
+    const avgTemp = (selectedDayData.maxTemp + selectedDayData.minTemp) / 2;
+    
     if (dayHourlyData.length === 0) {
-      // Fallback to daily averages
-      const avgTemp = (selectedDayData.maxTemp + selectedDayData.minTemp) / 2;
       return {
         temperature: avgTemp,
         symbolCode: selectedDayData.symbolCode,
-        humidity: 50, // Default if not available
-        windSpeed: 0, // Default if not available
-        feelsLike: avgTemp // Use average temp as feels like
+        humidity: 50,
+        windSpeed: 0,
+        feelsLike: avgTemp
       };
     }
     
     // Calculate averages from hourly data
-    const avgTemp = (selectedDayData.maxTemp + selectedDayData.minTemp) / 2;
     const avgHumidity = dayHourlyData.reduce((sum, h) => sum + (h.humidity || 50), 0) / dayHourlyData.length;
     const avgWindSpeed = dayHourlyData.reduce((sum, h) => sum + (h.windSpeed || 0), 0) / dayHourlyData.length;
-    
-    // Calculate feels like for the average conditions
     const feelsLike = calculateFeelsLike(avgTemp, avgWindSpeed, avgHumidity);
     
     return {
@@ -231,23 +191,17 @@ const getWeatherIcon = (symbolCode) => {
       symbolCode: selectedDayData.symbolCode,
       humidity: avgHumidity,
       windSpeed: avgWindSpeed,
-      feelsLike: feelsLike
+      feelsLike
     };
   };
 
+  // Loading state
   if (loading) {
     return (
       <div className="weather-card">
         <div className="loading-spinner">
           <svg className="spinner" viewBox="0 0 50 50">
-            <circle
-              className="spinner-path"
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              strokeWidth="5"
-            />
+            <circle className="spinner-path" cx="25" cy="25" r="20" fill="none" strokeWidth="5" />
           </svg>
           <p>{t('loading')}</p>
         </div>
@@ -255,6 +209,7 @@ const getWeatherIcon = (symbolCode) => {
     );
   }
 
+  // Error state
   if (error) {
     return (
       <div className="weather-card">
@@ -270,18 +225,9 @@ const getWeatherIcon = (symbolCode) => {
     );
   }
 
-  if (!weatherData) {
-    return (
-      <div className="weather-card">
-        <div className="error-message">
-          <p>{t('noData')}</p>
-        </div>
-      </div>
-    );
-  }
-
+  // No data state
   const selectedDayData = getSelectedDayData();
-  if (!selectedDayData) {
+  if (!weatherData || !selectedDayData) {
     return (
       <div className="weather-card">
         <div className="error-message">
@@ -297,9 +243,9 @@ const getWeatherIcon = (symbolCode) => {
   return (
     <div className="weather-card">
       <div className="card-layout">
-        {/* Left Section - Main Info */}
+        {/* Left Section */}
         <div className="card-left">
-          {/* Location Header with Day Label */}
+          {/* Location Header */}
           <div className="location-header">
             <svg className="location-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -313,9 +259,9 @@ const getWeatherIcon = (symbolCode) => {
             </div>
           </div>
 
-          {/* Weather Icon, Temperature, Description and Details - Two column layout on mobile */}
+          {/* Weather Main */}
           <div className="weather-main">
-            {/* Left Column: Icon and Temperature */}
+            {/* Left: Icon and Temperature */}
             <div className="weather-left-group">
               <img
                 src={getWeatherIcon(selectedDayData.symbolCode)}
@@ -348,18 +294,15 @@ const getWeatherIcon = (symbolCode) => {
               </div>
             </div>
 
-            {/* Right Column: Description and Details */}
+            {/* Right: Description and Details */}
             <div className="weather-right-group">
-              {/* Weather Description */}
               {weatherDescription && (
                 <div className="weather-description">
                   <p className="description-text">{weatherDescription}</p>
                 </div>
               )}
 
-              {/* Weather Details */}
               <div className="weather-details">
-                {/* Feels Like - Now always displayed */}
                 <div className="detail-item">
                   <svg className="detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -388,12 +331,9 @@ const getWeatherIcon = (symbolCode) => {
           </div>
         </div>
 
-        {/* Right Section - Graph */}
+        {/* Right Section */}
         <div className="card-right">
-          <TabNavigation 
-            activeTab={activeTab} 
-            onTabChange={setActiveTab} 
-          />
+          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
           
           <div className="graph-container">
             <WeatherGraph 
@@ -407,7 +347,7 @@ const getWeatherIcon = (symbolCode) => {
       </div>
 
       {/* Weekly Forecast */}
-      {weatherData.dailyForecast && weatherData.dailyForecast.length > 0 && (
+      {weatherData.dailyForecast?.length > 0 && (
         <WeeklyForecast
           dailyForecast={weatherData.dailyForecast}
           selectedDay={selectedDay}
