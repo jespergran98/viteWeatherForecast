@@ -162,8 +162,8 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
   const colors = getColor();
 
   const width = 600;
-  const height = 200;
-  const padding = { top: 25, right: 20, bottom: 35, left: 20 };
+  const height = 160;
+  const padding = { top: 20, right: 20, bottom: 28, left: 20 };
   const graphWidth = width - padding.left - padding.right;
   const graphHeight = height - padding.top - padding.bottom;
 
@@ -241,7 +241,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
                 <>
                   <text
                     x={point.x}
-                    y={point.y - 10}
+                    y={point.y - 8}
                     textAnchor="middle"
                     className="point-value"
                     fill="var(--color-text-primary)"
@@ -250,7 +250,7 @@ const WeatherGraph = ({ type, hourlyData, precipitationData, selectedDay }) => {
                   </text>
                   <text
                     x={point.x}
-                    y={height - padding.bottom + 22}
+                    y={height - padding.bottom + 18}
                     textAnchor="middle"
                     className="point-label"
                     fill="var(--color-text-tertiary)"

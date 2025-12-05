@@ -3,7 +3,7 @@
 .weather-graph {
   width: 100%;
   height: 100%;
-  min-height: 140px;
+  min-height: 100px;
 }
 
 .graph-svg {
@@ -47,16 +47,27 @@
   justify-content: center;
   text-align: center;
   color: var(--color-text-quaternary);
-  padding: var(--spacing-4xl);
+  padding: var(--spacing-3xl);
   font-size: var(--font-size-sm);
   height: 100%;
-  min-height: 140px;
+  min-height: 100px;
+}
+
+/* Responsive Design - Small Phones (360px+) */
+@media (min-width: 360px) {
+  .weather-graph {
+    min-height: 110px;
+  }
+
+  .no-data {
+    min-height: 110px;
+  }
 }
 
 /* Responsive Design - Larger Phones (480px+) */
 @media (min-width: 480px) {
   .weather-graph {
-    min-height: 160px;
+    min-height: 120px;
   }
 
   .point-value {
@@ -68,13 +79,17 @@
   }
 
   .no-data {
-    min-height: 160px;
+    min-height: 120px;
     font-size: var(--font-size-base);
   }
 }
 
 /* Responsive Design - Tablet (640px+) */
 @media (min-width: 640px) {
+  .weather-graph {
+    min-height: 130px;
+  }
+
   .point-value {
     font-size: 12px;
   }
@@ -82,10 +97,36 @@
   .point-label {
     font-size: 11px;
   }
+
+  .no-data {
+    min-height: 130px;
+  }
+}
+
+/* Responsive Design - Tablet Landscape / Small Desktop (768px+) */
+@media (min-width: 768px) {
+  .weather-graph {
+    min-height: 140px;
+  }
+
+  .no-data {
+    min-height: 140px;
+  }
 }
 
 /* Responsive Design - Desktop (1024px+) */
 @media (min-width: 1024px) {
+  .weather-graph {
+    min-height: 160px;
+  }
+
+  .no-data {
+    min-height: 160px;
+  }
+}
+
+/* Responsive Design - Large Desktop (1280px+) */
+@media (min-width: 1280px) {
   .weather-graph {
     min-height: 180px;
   }
